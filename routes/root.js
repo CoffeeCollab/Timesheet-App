@@ -6,38 +6,32 @@ const router = express.Router();
 const currentDir = process.cwd();
 
 router.post("/time-in", async (req, res) => {
-    const {userId} = req.body;
+    const { userId } = req.body;
 
     try {
         // Find the user's timesheet record using userId
-        let timesheet = await Timesheet.findOne({userId});
+        let timesheet = await Timesheet.findOne({ userId });
 
-        //If the user doesn'texist, create a new timesheet record
+        // If the user doesn't exist, create a new timesheet record
         if (!timesheet) {
-            timesheet = new Timesheet({userId, entries:[]});
-
-            //Check is the last entr has a time-out, if not, record the last entry as null and create a new entry
-            const lastEntry = timesheet.entries[timesheet.entries.length-1];
-            if (lastEntry && !lastEntry.timeOut) {
-                lastEntry.timeOut = null;
-                const newEntry = { date: new Date(), timeIn: new Date() };
-                timesheet.entries.push(newEntry);
-            } 
-            const newEntry = { date: new Date(), timeIn: new Date() };
-            timesheet.entries.push(newEntry);
-            
-
-            await timesheet.save();
-            res.status(200).json({ message: "Time-in recorded successfully", entry: newEntry });
+            timesheet = new Timesheet({ userId, entries: [] });
         }
-    }
-    catch (error) {
-        console.log(error);
-        res.status(500).json({message: "Internal Server Error"})
-    }
-})
 
-router.post("time-out", async (req, res) => {
+        // Check if the last entry has a time-out, if not, create a new entry
+        const lastEntry = timesheet.entries[timesheet.entries.length - 1];
+
+        const newEntry = { date: new Date(), timeIn: new Date() };
+        timesheet.entries.push(newEntry);
+
+        await timesheet.save();
+        res.status(200).json({ message: "Time-in recorded successfully", entry: newEntry });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+router.post("/time-out", async (req, res) => {
     const {userId} = req.body;
 
     try {
