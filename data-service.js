@@ -18,7 +18,8 @@ async function main() {
         // });
 
         // await timeIn(client, 1)
-        await timeOut(client, 1)
+        // await timeOut(client, 1)
+        
 
         // await deleteRecordById(client, 1)
 
@@ -61,14 +62,17 @@ async function timeIn(client, userId) {
     const currentDate = new Date();
     const day = currentDate.toLocaleDateString('en-US')
     const timeIn = currentDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+    const timeInNum = currentDate.getTime();
 
     const user = {_id: userId};
     const update = {
         $push: {
             workedDays: {
                 shift: {
+                    fullDate: currentDate,
                     date: day,
                     timeIn: timeIn,
+                    timeInNum: timeInNum,
                 }
             }
         }
@@ -77,48 +81,45 @@ async function timeIn(client, userId) {
     await client.db(dbName).collection(collectionName).updateOne(user, update)
 }
 
-async function timeOut(client, userId){
-    const currentDate = new Date();
-    const timeOut = currentDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+async function timeOut(client, userId) {
+  const currentDate = new Date();
+  const timeOut = currentDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+  const timeOutNum = currentDate.getTime();
 
-    const user = {_id: userId}
-    const update = {
-        $set: {
-          'workedDays.$[lastShift].shift.timeOut': timeOut,
-          'workedDays.$[lastShift].shift.workedHours': calculateWorkedHours(client, userId),
-        },
-      };
-    
-      // Identify the array element to update (the last shift in the workedDays array)
-      const arrayFilters = [{ 'lastShift.shift.timeOut': null }];
-    
-      const result = await client.db(dbName).collection(collectionName).updateOne(user, update, { arrayFilters });
-    
-      if (result.modifiedCount === 1) {
-        console.log(`Time-out recorded successfully for user with id ${userId}`);
-      } else {
-        console.log(`No user found with id ${userId} or no time-in recorded`);
-      }
+  const user = { _id: userId };
+  const update = {
+    $set: {
+      'workedDays.$[day].shift.timeOut': timeOut,
+      'workedDays.$[day].shift.timeOutNum': timeOutNum,
+    },
+  };
+  const options = { arrayFilters: [{ 'day.shift.timeOut': { $exists: false } }] };
+
+  await client.db(dbName).collection(collectionName).updateOne(user, update, options);
+
+  await calculateWorkedHours(client, userId);
 }
 
-// Helper function to calculate worked hours
 async function calculateWorkedHours(client, userId) {
-    const user = { _id: userId };
-    const projection = { workedDays: { $slice: -1 } }; // Retrieve the last element in the workedDays array
-    const result = await client.db(dbName).collection(collectionName).findOne(user, projection);
+  const user = { _id: userId };
+  const projection = { workedDays: { $slice: -1 } };
+  const result = await client.db(dbName).collection(collectionName).findOne(user, projection);
+  const lastTimeIn = result.workedDays[0].shift.timeInNum;
+  const lastTimeOut = result.workedDays[0].shift.timeOutNum;
   
-    if (result && result.workedDays && result.workedDays.length > 0) {
-      const lastShift = result.workedDays[0].shift;
-      if (lastShift.timeIn && lastShift.timeOut) {
-        const timeIn = new Date(lastShift.timeIn);
-        const timeOut = new Date(lastShift.timeOut);
-        const workedHours = (timeOut - timeIn) / (1000 * 60 * 60); // Convert milliseconds to hours
-        return parseFloat(workedHours.toFixed(2)); // Return worked hours as a number
-      }
-    }
-  
-    return null; // Return null if there is missing data
+
+  const update = {
+    $set: {
+      'workedDays.$[day].shift.workedHours': parseFloat((lastTimeOut - lastTimeIn) / (1000 * 60 * 60)), 
+    },
   }
+  const options = { arrayFilters: [{ 'day.shift.workedHours': { $exists: false } }] };
+  await client.db(dbName).collection(collectionName).updateOne(user, update, options);
+}
+
+
+
+
 
 async function deleteRecordById(client, userId) {
     const filter = { _id: userId };
