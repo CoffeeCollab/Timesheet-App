@@ -1,0 +1,39 @@
+<!-- views/time-in.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Record time out page</h1>
+    <button id="timeOutBtn">Time-out</button>
+
+    <script>
+        // Add an event listener to the button to trigger the time-in action
+        document.getElementById("timeOutBtn").addEventListener("click", async () => {
+            try {
+                // Make an AJAX request to the server to trigger the time-in action
+                const response = await fetch("/time-out", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ userId: 1 }),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log(data.message);
+                } else {
+                    console.error("Error recording time-in");
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>

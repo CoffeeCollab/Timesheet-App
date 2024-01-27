@@ -1,23 +1,12 @@
 import express from "express";
 import path from "path";
 import router from "./routes/root.js";
-import mongoose from "mongoose";
 import 'dotenv/config'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 //console.log(process.env.NODE_ENV)
-
-mongoose.connect(process.env.MONGODB_URI);
-
-
-// Check if the connection is successful
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "MongoDB connection error:"));
-db.once("open", () => {
-    console.log("Connected to MongoDB");
-});
 
 app.use(express.json())
 

@@ -1,37 +1,7 @@
-import { MongoClient } from "mongodb";
-import dotenv from "dotenv";
-dotenv.config();
+import { client, dbName, collectionName, connectToDatabase } from "../data-services/database.js";
 
-const uri = process.env.MONGODB_URI;
-const client = new MongoClient(uri);
-const dbName = "timesheet_app";
-const collectionName = "hoursRecords";
-
-async function main() {
-    try {
-        await client.connect();
-        await listDatabases(client);
-        // await createUser(client, {
-        //     _id: 1,
-        //     name: "Henrique Sagara",
-        //     workedDays: []
-        // });
-
-        // await timeIn(client, 1)
-        // await timeOut(client, 1)
-        
-
-        // await deleteRecordById(client, 1)
-
-        await queryAllRecords(client)
-    } catch (e) {
-        console.error(e);
-    } finally {
-        await client.close();
-    }
-}
-
-main().catch(console.error);
+// Call the connectToDatabase function to establish the connection
+connectToDatabase();
 
 async function listDatabases(client) {
     const databasesList = await client.db().admin().listDatabases();
@@ -110,16 +80,12 @@ async function calculateWorkedHours(client, userId) {
 
   const update = {
     $set: {
-      'workedDays.$[day].shift.workedHours': parseFloat((lastTimeOut - lastTimeIn) / (1000 * 60 * 60)), 
+      'workedDays.$[day].shift.workedHours': parseFloat((lastTimeOut - lastTimeIn) / (1000 * 60 * 60)),
     },
-  }
-  const options = { arrayFilters: [{ 'day.shift.workedHours': { $exists: false } }] };
+  };
+  const options = { arrayFilters: [{ 'day.shift.timeOut': { $exists: false } }] };
   await client.db(dbName).collection(collectionName).updateOne(user, update, options);
 }
-
-
-
-
 
 async function deleteRecordById(client, userId) {
     const filter = { _id: userId };
@@ -132,4 +98,13 @@ async function deleteRecordById(client, userId) {
     } else {
       console.log(`No record found with id ${userId}`);
     }
-  }
+}
+
+export {
+  timeIn,
+  timeOut,
+  calculateWorkedHours,
+  createUser,
+  queryAllRecords,
+  deleteRecordById,
+};
