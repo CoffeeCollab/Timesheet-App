@@ -19,7 +19,6 @@ router.post("/time-in", async (req, res) => {
 });
 
 router.post("/time-out", async (req, res) => {
-    // Similar modifications can be made for the time-out route handler if needed
     const userId = req.body.userId;
 
     try {
