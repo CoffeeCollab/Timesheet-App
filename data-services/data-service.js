@@ -39,7 +39,7 @@ async function timeIn(client, userId) {
         $push: {
             workedDays: {
                 shift: {
-                    fullDate: currentDate,
+                    fullDateIn: currentDate,
                     date: day,
                     timeIn: timeIn,
                     timeInNum: timeInNum,
@@ -59,6 +59,7 @@ async function timeOut(client, userId) {
   const user = { _id: userId };
   const update = {
     $set: {
+      'workedDays.$[day].shift.fullDateOut': currentDate,
       'workedDays.$[day].shift.timeOut': timeOut,
       'workedDays.$[day].shift.timeOutNum': timeOutNum,
     },
@@ -76,31 +77,37 @@ async function calculateWorkedHours(client, userId) {
     const user = { _id: userId };
     const projection = { workedDays: { $slice: -1 } };
     const result = await client.db(dbName).collection(collectionName).findOne(user, projection);
-    const lastTimeIn = result.workedDays[0].shift.timeInNum;
-    const lastTimeOut = result.workedDays[0].shift.timeOutNum;
 
-    console.log('lastTimeIn: ', lastTimeIn);
-    console.log('lastTimeOut: ', lastTimeOut);
+    const startTime = result.workedDays[0].shift.timeInNum;
+    console.log("Start time:", startTime, typeof(startTime))
+
+    const endTime = result.workedDays[0].shift.timeOutNum;
+    console.log("End time: ", endTime, typeof(endTime))
+
+    const timeDifferenceInSeconds = (endTime - startTime) / 1000;
+    console.log("Time difference in seconds: ", timeDifferenceInSeconds);
+    const workedHours = timeDifferenceInSeconds / 3600;
+    console.log("Worked hours: ", workedHours);
+    const workedHoursFixed = workedHours.toFixed(2);
+    console.log("Worked hours fixed: ", workedHoursFixed)
 
     const update = {
       $set: {
-        'workedDays.$[day].shift.workedHours': parseFloat((lastTimeOut - lastTimeIn) / (1000 * 60 * 60)),
+        'workedDays.$[day].shift.workedHours': parseFloat(workedHoursFixed),
       },
     };
+
     const options = { arrayFilters: [{ 'day.shift.workedHours': { $exists: false } }] };
-    
+
     await client.db(dbName).collection(collectionName).updateOne(user, update, options);
-
-    console.log('Update result:', result);
   } catch (e) {
-    console.error('Error in calculateWorkedHours:', e);
-        throw e;
+    console.error('Error: ', e);
+    throw e;
   }
-
-  
 }
 
-async function deleteRecordById(client, userId) {
+
+async function deleteUserById(client, userId) {
     const filter = { _id: userId };
   
     // Delete the record with the specified id
@@ -119,5 +126,5 @@ export {
   calculateWorkedHours,
   createUser,
   queryAllRecords,
-  deleteRecordById,
+  deleteUserById,
 };

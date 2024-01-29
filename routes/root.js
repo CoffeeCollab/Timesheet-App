@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import { client } from "../data-services/database.js";
-import { timeIn, timeOut } from "../data-services/data-service.js";
+import { timeIn, timeOut, deleteUserById, createUser } from "../data-services/data-service.js";
 
 const router = express.Router();
 const currentDir = process.cwd();
@@ -27,6 +27,34 @@ router.post("/time-out", async (req, res) => {
     } catch (e) {
         console.error(e);
         res.status(500).json({message: "Internal Server Error"})
+    }
+});
+
+// Route to handle creating a new user
+router.post("/create-user", async (req, res) => {
+    const newUser = req.body;
+
+    try {
+        await createUser(client, newUser);
+        res.status(200).json({ message: "User created successfully" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+router.delete("/delete/:userId", async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        console.log(`Deleting user with ID: ${userId}`);
+        // Call the deleteUserById function from data-service.js
+        await deleteUserById(client, userId);
+
+        res.status(200).json({ message: `User with ID ${userId} deleted successfully` });
+    } catch (error) {
+        console.error("Error deleting user:", error);
+        res.status(500).json({ message: "Internal Server Error" });
     }
 });
 
