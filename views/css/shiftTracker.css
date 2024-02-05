@@ -1,0 +1,83 @@
+body, html {
+  height: 100%;
+  margin: 0;
+  background-color:brown ;
+  background-image: url("/views/pictures/hand-drawn-happy-food-waiter-in-flat-style-png.webp");
+  background-position: left ;
+  background-size: contain 300px;
+  background-repeat: no-repeat;
+  background-position-y:center;
+}
+.container{
+display: flex;
+align-items: center;
+justify-content: center;
+align-items: center;
+height: 100vh;
+width: 100%;
+}
+.digitalClockFrame{
+border: solid 2px #ae445a;
+border-right:solid 7px  #ae445a;
+border-top: solid 5px #ae445a;
+border-bottom: 2px solid #ae445a;
+height: 200px;
+border-top-left-radius:25px ;
+border-top-right-radius: 25px;
+text-align: center;
+background-color: black;
+margin-bottom: auto;
+}
+.digitalClockFrame p{
+  margin-top: 55px;
+  font-size: 4em;
+  font-family: 'Orbitron', sans-serif;
+  color:#f39f5a;
+}
+.features{
+justify-content: space-between;
+width: 700px;
+height: 350px;
+}
+.buttons{
+display: flex;
+justify-content: space-between;
+background-color: #f39f5a;
+border-bottom-left-radius: 20px;
+border-bottom-right-radius: 20px;
+height: 170px; 
+width: 100%;
+}
+.buttons button{
+margin: 30px;
+width: 100px;
+height: 55px;
+border-radius: 10px;
+border: solid 3px black;
+}
+
+#break{
+background-color: rgb(122, 122, 241);
+color: white;
+width: 98px;
+}
+#timeInTime{
+
+color: #1a1f71;
+font-size:11px;
+font-weight: bold;
+}
+#timeOutTime{
+ 
+  color: #1a1f71;
+  font-size: 15px;
+  font-size: 11px;
+  font-weight: bold;
+}
+.icons{
+margin-top: 25px;
+display: flex;
+flex-direction: row;
+justify-content: center;
+margin-bottom: -95px;
+}

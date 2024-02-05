@@ -4,8 +4,167 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timesheet App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="css/homePage.css">
+
+      <!-- Fonts -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Edu+NSW+ACT+Foundation:wght@400;500;600;700&display=swap" rel="stylesheet">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Signika:wght@600&display=swap" rel="stylesheet">
+      
 </head>
 <body>
-    <h1>Welcome to the Timesheet App!</h1>
+    <div class="row row-col-3 row-flex" id="header">
+       <div class="col col-2">
+        <div class="box">
+              <h1 >Timesheet App</h1>
+              <h3>By CoffeeCollab</h3>
+        </div>
+       </div>
+       <div class="col col-8">
+        <div class="box ">
+          <nav >
+            <a href="#"  >
+                 My shifts</a>
+            <a href="#" >
+                My team</a>
+            <a href="shiftTracker.html" >
+              Shift Tracker</a>
+            <a href="#" >
+             Link</a>
+          </nav>
+        </div>
+       </div>
+       <div class="col col-2 ">
+     
+
+        <div class="box col-12 d-flex justify-content-center" id="right-box">
+           
+        </div>
+       </div>
+    </div>
+    <div class="container container-full-width-div"  >
+        <div class="row row-3 row-flex ">
+            <div class="row  ">
+                <div class="col row-8 d-flex justify-content-center text-center " id="registerationBox">
+                  <div class="register-box row-flex" >
+                    <form action="index.html" method="get" id="myFormId" novalidate>
+                      
+                      
+                      <input type="radio" class="btn-check" name="userType" id="manager" autocomplete="off" checked>
+                      <label class="btn btn-outline-primary" for="manager">Manager</label>
+
+                      <input type="radio" class="btn-check" name="userType" id="employee" autocomplete="off">
+                      <label class="btn btn-outline-primary" for="employee">Employee</label>
+                      
+                      <div class="form-floating">
+                        <input type="text" id="firstName" class="form-control shadow  rounded " placeholder="FirstName" required>
+                        <label for="firstName" class="form-label">First Name</label>
+                      
+                      </div>
+                      <div class="form-floating">
+                        <input type="text" id="lastName" class="form-control shadow  rounded " placeholder="LastName" required>
+                        <label for="lastName" class="form-label">Last Name</label>
+                      </div>
+                      
+                     <div class="form-floating">
+                      <input type="password" id="password" class="form-control shadow  rounded " placeholder="Password" required>
+                     <label for="password" class="form-label">Password</label>
+                     </div>
+                        
+                        
+                
+              
+                      <button onclick="createNewEmployee()" type="button"  class="btn  shadow  mb-5  rounded ">register</button>
+                     
+
+                    </form>
+                  
+                  </div> 
+                </div>
+                <div class="col-4 row-4  offset-1  d-flex justify-content-center " id="clock-box">
+                 
+                  <div class="clock">
+                     <div class="numbers">
+                      <span style="--i:0;"><b>12</b></span>
+                      <span style="--i:1;"><b>3</b></span>
+                      <span style="--i:2;"><b>6</b></span>
+                      <span style="--i:3;"><b>9</b></span>
+                      <div class="circle" id="hr"><i></i></div>
+                      <div class="circle" id="mn"><i></i></div>
+                      <div class="circle" id="sc"><i></i></div>
+                     </div>  
+
+                  </div>
+
+                </div>
+                <div class="col-6 row-12  mt-5 offset-4" id="slide-box">
+                  
+                  <div id="carouselExample" class="carousel slide">
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <img src="/views/pictures/toronto.webp" class="d-block w-100" alt="...">
+                        <div class="carousel-caption d-none d-md-block " id="text-context">
+                          <h5 >Why did we decide to do a time sheet App? </h5>
+                          <p>in back then we used to work in a restaurant where all the time sheet managed by paper sheets ,
+                            and we would always think about how easy it'd be with an app so one day we came up with an idea of a time sheet app</p>
+                        </div>
+                      </div>
+                      <div class="carousel-item">
+                        <img src="/views/pictures/toronto2.jpg" class="d-block w-100" alt="...">
+                        <div class="carousel-caption d-none d-md-block " id="text-context">
+                          <h5 >what Features did we use for this project?</h5>
+                          <p>HTML,CSS,Bootstrap,JS,MongoDB</p>
+                        </div>
+                      </div>
+                      <div class="carousel-item">
+                        
+                        <img src="/views/pictures/toronto3.jpg" class="d-block w-100" alt="...">
+                        <div class="carousel-caption d-none d-md-block " id="text-context">
+                          <h5 >Who's CoffeeCollab? </h5>
+                          <p>Three friends who are trying to learn new things from each other and gain some experience by doing new projects. </p>
+                        </div>
+                      </div>
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="visually-hidden">Next</span>
+                    </button>
+                  </div>
+
+                </div>
+              
+    </div>
+    <div class="row row-col-1 row-flex">
+      
+        <div class="col row-12  offset-2 gy-4 " id="footer">
+          <div class="left-footer col-3">
+            <img src="/views/pictures/CoffeeCollab.jpeg" >
+            <a href="mailto:coffecollab@outlook.com"> <h5>Contact us</h5></a>
+            <p>© 2023 CoffeeCollab, Inc</p>
+          </div>
+          <div class="mid-footer">
+            
+          </div>
+          <div class="right-footer">
+            <a href="#"><img src="/views/pictures/twitter-icon.png" alt=""></a>
+            <a href="#"><img src="/views/pictures/insta.webp" alt=""></a>
+            <a href="https://github.com/CoffeeCollab"><img src="/views/pictures/github-icon.png" alt=""></a>
+         
+          </div>
+        </div>
+     
+   
+    </div>
+    <script  src="/views/jsForPages/index.js"></script>
 </body>
 </html>
