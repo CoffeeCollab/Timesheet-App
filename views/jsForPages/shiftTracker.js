@@ -25,8 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
     let isTimeInClicked = false;
     let startTime;
     let endTime;
+    let totalBreakDuration = 0; // Variable to track total break duration
     let isBreakActive = false;
-
     // Event handler for the "Time In" button click
     document.getElementById("timeInBtn").onclick = function () {
       if (!isTimeInClicked) {
@@ -56,11 +56,9 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("timeOutTime").innerHTML = `Your shift ended at :${formattedTime2}`
         shift = false;
         isTimeInClicked = false;
-        totalHourCalculator(startTime, endTime);
-        isBreakActive = false;
-        breakButton.style.backgroundColor = "rgb(122, 122, 241)";
-        breakButton.style.color = "white";
-        breakButton.textContent = "Take a Break";
+        const { totalHours, breakDuration } = totalHourCalculator(startTime, endTime, totalBreakDuration);
+        totalBreakDuration += breakDuration; // Update total break duration
+        window.alert(`You worked for ${parseFloat(totalHours).toFixed(2)} hours. Total break duration: ${totalBreakDuration.toFixed(2)} minutes.`);
       } else if (!isTimeInClicked) {
         window.alert("You cannot punch out before you start your shift");
       }
@@ -91,9 +89,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Calculate break duration
         const breakEndTime = new Date();
-        const breakDuration = (breakEndTime.getTime() - breakStartTime.getTime()) / (1000 * 60); // Convert to minutes
-        // Deduct break duration from the total hours
-        totalHourCalculator(startTime, endTime, breakDuration);
+        const breakDuration = Math.ceil((breakEndTime.getTime() - breakStartTime.getTime()) / (1000 * 60));
+        totalBreakDuration += breakDuration; // Update total break duration
       }
 
       // Check if the user has punched in
@@ -107,7 +104,6 @@ document.addEventListener("DOMContentLoaded", function () {
       } else if (!isTimeInClicked) {
         window.alert("You cannot take a break before you punch in");
       }
-
     });
 
   } catch (err) {
@@ -116,18 +112,16 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Function to calculate total worked hours
-  function totalHourCalculator(startTime, endTime, breakDuration = 0) {
+  function totalHourCalculator(startTime, endTime, totalBreakDuration) {
     const time1InSeconds = startTime.getTime() / 1000;
     const time2InSeconds = endTime.getTime() / 1000;
 
     let totalHours = (time2InSeconds - time1InSeconds) / 3600;
 
-    // Deduct break time if provided
-    totalHours -= breakDuration / 60;
+    // Deduct total break duration from the total hours
+    totalHours -= totalBreakDuration / 60;
 
-    console.log(`DEBUG: totalHours: ${totalHours.toFixed(2)}`); // Debugging line
-    window.alert(`You worked for ${totalHours.toFixed(2)} hours. Break reduction: ${breakDuration.toFixed(2)} minutes.`);
-    return totalHours.toFixed(2);
+    return { totalHours: totalHours.toFixed(2), breakDuration: totalBreakDuration };
   }
 
 });

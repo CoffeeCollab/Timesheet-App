@@ -1,12 +1,7 @@
 body, html {
   height: 100%;
   margin: 0;
-  background-color:brown ;
-  background-image: url("/views/pictures/hand-drawn-happy-food-waiter-in-flat-style-png.webp");
-  background-position: left ;
-  background-size: contain 300px;
-  background-repeat: no-repeat;
-  background-position-y:center;
+  background-color:black ;
 }
 .container{
 display: flex;
@@ -15,64 +10,94 @@ justify-content: center;
 align-items: center;
 height: 100vh;
 width: 100%;
+
 }
 .digitalClockFrame{
-border: solid 2px #ae445a;
-border-right:solid 7px  #ae445a;
-border-top: solid 5px #ae445a;
-border-bottom: 2px solid #ae445a;
+border: solid 1px white;
+border-left: none;
+border-right: none;
 height: 200px;
 border-top-left-radius:25px ;
 border-top-right-radius: 25px;
 text-align: center;
 background-color: black;
 margin-bottom: auto;
+
 }
 .digitalClockFrame p{
   margin-top: 55px;
   font-size: 4em;
   font-family: 'Orbitron', sans-serif;
-  color:#f39f5a;
+  background: #FFFFFF;
+  background: linear-gradient(to right, #FFFFFF 30%, #3a3e3f 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  
 }
 .features{
+  
 justify-content: space-between;
 width: 700px;
 height: 350px;
+
 }
 .buttons{
+  border: solid 1px white;
 display: flex;
+flex-direction: column;
 justify-content: space-between;
-background-color: #f39f5a;
+background-color: black;
 border-bottom-left-radius: 20px;
 border-bottom-right-radius: 20px;
-height: 170px; 
+height: 270px; 
 width: 100%;
-}
-.buttons button{
-margin: 30px;
-width: 100px;
-height: 55px;
-border-radius: 10px;
-border: solid 3px black;
+padding: 0px 50px;
 }
 
+.btn {
+
+  padding: 1rem 2rem;
+  border: white 1px solid;
+  outline: none;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  background-color: rgb(14, 14, 26);
+  color: rgb(234, 234, 234);
+  font-weight: 700;
+  transition: 0.6s;
+  box-shadow: 0px 0px 60px #1f4c65;
+  -webkit-box-reflect: below 10px linear-gradient(to bottom, rgba(0,0,0,0.0), rgba(0,0,0,0.4));
+  height: 60px;
+  margin: 15px;
+}
+
+.btn:active {
+  scale: 0.92;
+}
 #break{
-background-color: rgb(122, 122, 241);
-color: white;
-width: 98px;
-}
-#timeInTime{
 
-color: #1a1f71;
-font-size:11px;
-font-weight: bold;
+width: 200px;
 }
-#timeOutTime{
- 
-  color: #1a1f71;
-  font-size: 15px;
-  font-size: 11px;
-  font-weight: bold;
+#timeOutBtn:hover {
+  background: rgb(2,29,78);
+  background: linear-gradient(270deg, rgb(201, 3, 3) 0%, rgb(255, 73, 73) 60%);
+  color: rgb(4, 4, 38);
+}
+#timeInBtn:hover{
+  background: rgb(2,29,78);
+  background: linear-gradient(270deg, rgb(2, 202, 2) 0%, rgb(122, 247, 122) 60%);
+  color: rgb(4, 4, 38);
+}
+#break:hover{
+  background: rgb(2,29,78);
+  background: linear-gradient(270deg, rgb(0, 0, 181) 0%, rgb(76, 163, 244) 60%);
+  color: rgb(4, 4, 38);
+}
+.buttons p{
+font-size: 15px;
+margin-bottom: 100px;
+color: white;
 }
 .icons{
 margin-top: 25px;
@@ -80,4 +105,21 @@ display: flex;
 flex-direction: row;
 justify-content: center;
 margin-bottom: -95px;
+}
+.time-Box{
+height: 60px;
+width: 100%;
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
+}
+.btn-box{
+height: 90%;
+width: 100%;
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: center;
+padding-bottom: 25px;
 }

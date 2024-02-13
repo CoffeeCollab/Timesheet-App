@@ -19,14 +19,15 @@
 <body>
 <div class="icons">
   <a href="index.html">
-    <lord-icon 
-    src="https://cdn.lordicon.com/laqlvddb.json"
-    trigger="hover"
-    state="loop-smoke"
-    colors="primary:#f39f5a,secondary:#ae445a"
-    style="width:75px;height:75px; margin:25px;">
-    
-</lord-icon>
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
+    <lord-icon
+        src="https://cdn.lordicon.com/laqlvddb.json"
+        trigger="loop"
+        delay="1000"
+        state="loop-smoke"
+        colors="primary:#ffffff,secondary:#66ee78"
+        style="width:75px;height:75px">
+    </lord-icon>
 </div>
 </a>
   <div class="container ">
@@ -38,21 +39,22 @@
         </div>  
       </div>
       <div class="buttons">
-        <div>
-        <button type="button" class="btn btn-success" id="timeInBtn" >Time in</button>
-        <p id="timeInTime"></p>
+      
+        <div class="time-Box">
+          <p id="timeInTime"></p>
+          <p id="timeOutTime"></p>
+        </div>
+        <div class="btn-box">
+
+        <button type="button" class="btn"  id="timeInBtn">
+          Punch in
+        </button>
+        <button type="button" class="btn" id="break" >Take a Break</button>
+
+        <button type="button" class="btn" id="timeOutBtn">Time out</button>
       </div>
      
-        <div>
-          <button type="button" class="btn btn-outline-primary" id="break" onclick="">Take a Break</button>
-         
-        </div>
   
-          <div>
-            <button type="button" class="btn btn-danger" id="timeOutBtn">Time out</button>
-            <p id="timeOutTime"></p>
-            </div>
-
     </div>
     
     </div>
