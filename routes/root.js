@@ -6,6 +6,30 @@ import { timeIn, timeOut, deleteUserById, createUser } from "../data-services/da
 const router = express.Router();
 const currentDir = process.cwd();
 
+router.post("/time-in", async (req, res) => {
+    const userId = req.body.userId;
+
+    try {
+        await timeIn(client, userId);
+        res.status(200).json({ message: "Time-in recorded successfully" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+router.post("/time-out", async (req, res) => {
+    const userId = req.body.userId;
+
+    try {
+        await timeOut(client, userId);
+        res.status(200).json({message: "Time-out recorded successfully"})
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({message: "Internal Server Error"})
+    }
+});
+
 // Route to handle creating a new user
 router.post("/create-user", async (req, res) => {
     const newUser = req.body;
@@ -38,5 +62,12 @@ router.get("/time-in", (req, res) => {
     res.sendFile(path.resolve(currentDir, 'views', 'time-in.html'));
 });
 
+router.get("/time-out", (req, res) => {
+    res.sendFile(path.resolve(currentDir, 'views', 'time-out.html'))
+})
 
-export default router
+router.get('/', (req, res) => {
+    res.sendFile(path.resolve(currentDir, 'views', 'index.html'));
+});
+
+export default router;
