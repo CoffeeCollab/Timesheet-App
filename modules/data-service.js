@@ -1,7 +1,7 @@
-import { client, dbName, collectionName, connectToDatabase } from "../data-services/database.js";
+import { client, dbName, collectionName, connectToDatabase } from "./database.js";
 
 // Call the connectToDatabase function to establish the connection
-connectToDatabase();
+// connectToDatabase();
 
 async function listDatabases(client) {
     const databasesList = await client.db().admin().listDatabases();

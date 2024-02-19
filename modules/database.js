@@ -6,6 +6,7 @@ const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri);
 const dbName = "timesheet_app";
 const collectionName = "hoursRecords";
+const userCollection = "users"
 
 // Function to connect to the MongoDB server
 async function connectToDatabase() {
@@ -20,4 +21,4 @@ async function connectToDatabase() {
 }
 
 
-export { client, dbName, collectionName, connectToDatabase };
+export { client, dbName, collectionName, userCollection,connectToDatabase };

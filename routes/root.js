@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
-import { client } from "../data-services/database.js";
-import { timeIn, timeOut, deleteUserById, createUser } from "../data-services/data-service.js";
+import { client } from "../modules/database.js";
+import { timeIn, timeOut, deleteUserById, createUser } from "../modules/data-service.js";
 
 const router = express.Router();
 const currentDir = process.cwd();
