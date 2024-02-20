@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import router from "./routes/root.js";
-import { connectToDatabase } from "./modules/database.js";
+import { client, connectToDatabase, listDatabases } from "./modules/database.js";
 import 'dotenv/config'
 
 const app = express();
@@ -18,6 +18,8 @@ app.use(express.static(path.join(currentDir, 'public')))
 
 // Call the connectToDatabase function to establish the connection
 connectToDatabase();
+
+listDatabases(client)
 
 app.use('/', router);
 

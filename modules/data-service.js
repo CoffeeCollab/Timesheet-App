@@ -3,15 +3,6 @@ import { client, dbName, collectionName, connectToDatabase } from "./database.js
 // Call the connectToDatabase function to establish the connection
 // connectToDatabase();
 
-async function listDatabases(client) {
-    const databasesList = await client.db().admin().listDatabases();
-
-    console.log("Databases:");
-    databasesList.databases.forEach(db => {
-        console.log(`-${db.name}`);
-    });
-}
-
 // Create new user
 async function createUser(client, newUser) {
     const result = await client.db(dbName).collection(collectionName).insertOne(newUser);

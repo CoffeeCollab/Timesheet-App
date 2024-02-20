@@ -20,5 +20,13 @@ async function connectToDatabase() {
   }
 }
 
+async function listDatabases(client) {
+  const databasesList = await client.db().admin().listDatabases();
 
-export { client, dbName, collectionName, userCollection,connectToDatabase };
+  console.log("Databases:");
+  databasesList.databases.forEach(db => {
+      console.log(`-${db.name}`);
+  });
+}
+
+export { client, dbName, collectionName, userCollection, listDatabases, connectToDatabase };

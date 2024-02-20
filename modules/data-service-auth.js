@@ -1,17 +1,9 @@
-import { client, dbName, collectionName, connectToDatabase } from "./database.js";
-import bcrypt from "bcrypt";
-import dotenv from "dotenv";
-dotenv.config();
+import { client, userCollection } from "./database.js";
 
-const uri = process.env.MONGODB_URI;
+async function createUser(client, newUser) {
+    const result = await client.db(dbName).collection(userCollection).insertOne(newUser);
 
-const userSchema = new mongoose.Schema({
-    name: { type: String, required: true},
-    email: {type: String, required: true, unique: true},
-    password: {type: String, required: true},
-    manager: {type: String},
-    isManager: { type: Boolean, default: false},
-});
-
-let User;
+    console.log(`${result.insertedCount} new user(s) created with the following id(s)`);
+    console.log(result.insertedIds);
+}
 
