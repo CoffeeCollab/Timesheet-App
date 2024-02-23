@@ -62,6 +62,44 @@ document.addEventListener("DOMContentLoaded", function () {
       } else if (!isTimeInClicked) {
         window.alert("You cannot punch out before you start your shift");
       }
+
+
+      // twilio API  for sending sms messages
+
+  console.log('Sending confirmation message...');
+  const accountSid = 'AC76be89cce69a7705839035004025d6eb';
+  const authToken = '3b3743d083ccc4b19fbdf18f49473cd6';
+  const twilioPhoneNumber = '+15168149425';
+  const recipientPhoneNumber = '+14167311767';
+
+  const message = 'Your shift has ended.';
+
+  fetch(`https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Authorization': 'Basic ' + btoa(`${accountSid}:${authToken}`)
+    },
+    body: new URLSearchParams({
+      'To': recipientPhoneNumber,
+      'From': twilioPhoneNumber,
+      'Body': message
+    })
+  })
+  .then(response => {
+    if (response.ok) {
+      console.log('Message sent successfully.');
+      // Handle success
+    } else {
+      console.error('Failed to send message:', response.status, response.statusText);
+      response.text().then(errorMessage => console.error('Error details:', errorMessage));
+      // Handle error
+    }
+  })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+
     };
 
     // Get the break button element
@@ -125,3 +163,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 });
+
+
+
+

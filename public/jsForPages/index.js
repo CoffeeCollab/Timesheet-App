@@ -63,8 +63,17 @@ function example() {
  // phone number validation will be here
   } catch(error) {
     console.error(error);
+    showNotification(error.message);
     // You might display these errors to the user in a more user-friendly way.
   }
+}
+function showNotification(message) {
+  var notificationBox = document.getElementById("notification-box");
+  notificationBox.textContent = message;
+  notificationBox.style.display = "block";
+  setTimeout(function() {
+      notificationBox.style.display = "none";
+  }, 10000); // Hide after 10 seconds
 }
 
 
