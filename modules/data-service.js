@@ -4,11 +4,10 @@ import { client, dbName, collectionName, connectToDatabase } from "./database.js
 // connectToDatabase();
 
 // Create new user
-async function createUser(client, newUser) {
-    const result = await client.db(dbName).collection(collectionName).insertOne(newUser);
+async function addNewUser(client, userId) {
+    const result = await client.db(dbName).collection(collectionName).insertOne({_id: userId});
 
-    console.log(`${result.insertedCount} new user(s) created with the following id(s)`);
-    console.log(result.insertedIds);
+    console.log(`${result._id} new user(s) created in hoursRecords database`);
 }
 
 
@@ -115,7 +114,7 @@ export {
   timeIn,
   timeOut,
   calculateWorkedHours,
-  createUser,
+  addNewUser,
   queryAllRecords,
   deleteUserById,
 };

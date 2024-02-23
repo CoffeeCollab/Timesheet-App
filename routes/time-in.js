@@ -1,12 +1,12 @@
 import express from "express";
 import path from "path";
-import { client } from "../models/database.js";
+import { client, authenticateUser } from "../models/database.js";
 import { timeIn } from "../models/data-service.js";
 
 const router = express.Router();
 const currentDir = process.cwd();
 
-router.post("/time-in", async (req, res) => {
+router.post("/time-in", authenticateUser, async (req, res) => {
     const userId = req.body.userId;
 
     try {
@@ -19,7 +19,7 @@ router.post("/time-in", async (req, res) => {
 });
 
 
-router.get("/time-in", (req, res) => {
+router.get("/time-in", authenticateUser, (req, res) => {
     res.sendFile(path.resolve(currentDir, 'views', 'time-in.html'));
 });
 
