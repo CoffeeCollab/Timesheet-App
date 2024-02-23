@@ -1,3 +1,5 @@
+import express from "express";
+import path from "path";
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
 dotenv.config();
@@ -7,6 +9,15 @@ const client = new MongoClient(uri);
 const dbName = "timesheet_app";
 const collectionName = "hoursRecords";
 const userCollection = "users"
+
+const authenticateUser = (req, res, next) => {
+  if(req.session.user) {
+      next()
+  }
+  else {
+      res.status(401).json({message: 'Unauthorized'});
+  }
+}
 
 // Function to connect to the MongoDB server
 async function connectToDatabase() {
@@ -29,4 +40,6 @@ async function listDatabases(client) {
   });
 }
 
-export { client, dbName, collectionName, userCollection, listDatabases, connectToDatabase };
+
+
+export { client, dbName, collectionName, userCollection, listDatabases, connectToDatabase, authenticateUser };

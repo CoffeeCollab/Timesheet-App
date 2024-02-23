@@ -1,4 +1,5 @@
 import express from "express";
+import session from "express-session";
 import path from "path";
 import router from "./routes/root.js";
 import { client, connectToDatabase, listDatabases } from "./modules/database.js";
@@ -15,6 +16,15 @@ app.use(express.json())
 const currentDir = process.cwd();
 
 app.use(express.static(path.join(currentDir, 'public')))
+
+const sessionSecret = 'htsagara';
+
+//Set up session middleware
+app.use(session({
+    secret: sessionSecret,
+    resave: false,
+    saveUninitialized: true,
+}))
 
 // Call the connectToDatabase function to establish the connection
 connectToDatabase();

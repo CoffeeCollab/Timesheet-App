@@ -20,6 +20,10 @@ async function isUserIdExists(userId) {
     return !!result;
 }
 
+async function getUserByEmail(email) {
+    const result = await client.db(dbName).collection(userCollection).findOne({email: email})
+}
+
 async function hashPassword(password){
     return await bcrypt.hash(password, saltRounds)
 }
@@ -27,4 +31,5 @@ async function hashPassword(password){
 export {
     createUser,
     isUserIdExists,
+    getUserByEmail,
   };

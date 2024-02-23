@@ -1,12 +1,15 @@
 import express from "express";
 import path from "path";
-import { client } from "../modules/database.js";
+import bcrypt from 'bcrypt'
+import { client, authenticateUser } from "../modules/database.js";
 import { timeIn, timeOut, deleteUserById, addNewUser } from "../modules/data-service.js";
-import { createUser } from "../modules/data-service-auth.js";
+import { createUser, getUserByEmail } from "../modules/data-service-auth.js";
 
 
 const router = express.Router();
 const currentDir = process.cwd();
+
+
 
 // Route to handle creating a new user
 router.post("/create-user", async (req, res) => {
@@ -25,6 +28,37 @@ router.post("/create-user", async (req, res) => {
     }
 });
 
+router.post("/login", async (req, res) => {
+    const {email, password} = req.body;
+
+    try {
+        const user = await getUserByEmail(email)
+        console.log(user)
+
+        if(!user) {
+            res.status(401).json({message: 'Invalid email or password'});
+            return;
+        }
+
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        if(passwordMatch) {
+            req.session.user = {
+                id: user._id,
+                email: user.email,
+            }
+            res.status(200).json({message: 'Login successful'});
+        }
+        else {
+            res.status(401).json({ message: 'Invalid email or password' });
+        }
+
+    } catch (error) {
+        console.error('Error during login:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+})
+
 router.delete("/delete/:userId", async (req, res) => {
     const userId = req.params.userId;
 
@@ -40,16 +74,19 @@ router.delete("/delete/:userId", async (req, res) => {
     }
 });
 
-router.get("/time-in", (req, res) => {
-    res.sendFile(path.resolve(currentDir, 'views', 'time-in.html'));
-});
-
-router.get("/time-out", (req, res) => {
-    res.sendFile(path.resolve(currentDir, 'views', 'time-out.html'))
-})
-
 router.get('/', (req, res) => {
     res.sendFile(path.resolve(currentDir, 'views', 'index.html'));
 });
 
+router.get('/shift-table', authenticateUser, (req, res) => {
+    res.sendFile(path.resolve(currentDir, 'views', 'shiftTable.html'))
+})
+
+router.get('/shift-tracker', authenticateUser, (req, res) => {
+    res.sendFile(path.resolve(currentDir, 'views', 'shiftTracker.html'))
+})
+
+router.get('/about-us', (req, res) => {
+    res.sendFile(path.resolve(currentDir, 'views', 'aboutUs.html'))
+})
 export default router;

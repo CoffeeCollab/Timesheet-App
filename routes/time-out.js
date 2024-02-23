@@ -6,7 +6,7 @@ import { timeOut } from "../models/data-service.js";
 const router = express.Router();
 const currentDir = process.cwd();
 
-router.post("/time-out", async (req, res) => {
+router.post("/time-out", authenticateUser, async (req, res) => {
     const userId = req.body.userId;
 
     try {
@@ -18,7 +18,7 @@ router.post("/time-out", async (req, res) => {
     }
 });
 
-router.get("/time-out", (req, res) => {
+router.get("/time-out", authenticateUser, (req, res) => {
     res.sendFile(path.resolve(currentDir, 'views', 'time-out.html'))
 })
 
