@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const accountSid = 'AC76be89cce69a7705839035004025d6eb';
   const authToken = '3b3743d083ccc4b19fbdf18f49473cd6';
   const twilioPhoneNumber = '+15168149425';
-  const recipientPhoneNumber = '+14167311767';
+  const recipientPhoneNumber = '+';
 
   const message = 'Your shift has ended.';
 
