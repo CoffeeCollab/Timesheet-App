@@ -36,6 +36,41 @@ setInterval(() => {
   sc.style.transform = `rotateZ(${ss}deg)`;
 }, 1000); // Repeat the function every 1000 milliseconds (1 second)
 
+function example() {
+  try {
+    let fullName = document.getElementById("registrationFullName").value;
+    let emailAddress = document.getElementById("registrationEmail").value;
+    let password = document.getElementById("registrationPassword").value;
+    let confirmPassword = document.getElementById("confirmPasswordRegistration").value;
+    let phoneNumber = document.getElementById("tel").value;
+  
+    if (fullName.length < 2) {
+       throw new Error("The name must be at least 2 characters long.");
+    }
+
+    if (!/\S+@\S+\.\S+/.test(emailAddress)) {
+      throw new Error("Invalid email address");
+    }
+
+    if (password.length < 8) {
+       throw new Error("Password must be at least 8 characters long.");
+    }
+
+    if (password !== confirmPassword) {
+       throw new Error("Passwords do not match.");
+    }
+
+ // phone number validation will be here
+  } catch(error) {
+    console.error(error);
+    // You might display these errors to the user in a more user-friendly way.
+  }
+}
+
+
+
+
+/* WILL BE DELETED 
 function createNewEmployee() {
   try {
     // Retrieve values from form inputs
@@ -108,3 +143,17 @@ function createUserBtn(event) {
     createNewManager();
   }
 }
+*/
+
+function showForm() {
+  document.getElementById('registrationOverlay').classList.add('showOverlay');
+  document.getElementById('registrationFormContainer').classList.add('showRegisterForm');
+  document.getElementById('registrationFormContainer').style.display = 'flex';
+}
+function closeModal() {
+  document.getElementById('registrationOverlay').classList.remove('showOverlay');
+  document.getElementById('registrationFormContainer').classList.remove('showRegisterForm');
+  document.getElementById('registrationFormContainer').style.display = 'none';
+}
+
+
