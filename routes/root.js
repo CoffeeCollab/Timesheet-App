@@ -3,8 +3,8 @@ import path from "path";
 import bodyParser from "body-parser";
 import bcrypt from 'bcrypt'
 import { client, authenticateUser } from "../modules/database.js";
-import { timeIn, timeOut, deleteUserById, addNewUser } from "../modules/data-service.js";
-import { createUser, getUserByEmail } from "../modules/data-service-auth.js";
+import { deleteUserById, addNewUser} from "../modules/data-service.js";
+import { createUser, getUserByEmail, getUserByName, getUserBySin } from "../modules/data-service-auth.js";
 
 
 const router = express.Router();
@@ -20,6 +20,13 @@ router.post("/create-user", async (req, res) => {
     console.log("Received request body:", newUser);
 
     try {
+        // Check if the email or name already exists
+        const emailExists = await getUserByEmail(client, newUser.email);
+        const nameExists = await getUserByName(client, newUser.fullname);
+        if (emailExists || nameExists) {
+            return res.status(400).json({ message: "User already exists" });
+        }
+
         const createdUser = await createUser(client, newUser);
         const createdId = createdUser.insertedId;
 

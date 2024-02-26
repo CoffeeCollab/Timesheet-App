@@ -20,10 +20,22 @@ async function isUserIdExists(userId) {
     return !!result;
 }
 
-async function getUserByEmail(email) {
+async function getUserByEmail(client, email) {
     const result = await client.db(dbName).collection(userCollection).findOne({email: email})
 
     return result
+}
+
+async function getUserByName(client, name) {
+    const result = await client.db(dbName).collection(userCollection).findOne({fullname: name})
+
+    return result
+}
+
+async function getUserBySin(client, sin) {
+    const result = await client.db(dbName).collection(userCollection).findOne({_id: sin})
+
+    return result;
 }
 
 async function hashPassword(password){
@@ -34,4 +46,6 @@ export {
     createUser,
     isUserIdExists,
     getUserByEmail,
+    getUserByName,
+    getUserBySin,
   };
