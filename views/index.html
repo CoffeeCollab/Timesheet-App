@@ -72,7 +72,7 @@
               <div id="registrationFormContainer" class="registrationFormContainer" style="display: none;">
            
                 <span id="X" onclick="closeModal()">&times;</span>
-                 <form action="index.html" method="post" >
+                 <form action="/create-user" method="POST" >
                    
                   <h2 class="registerTitle">Register Now!</h2>
                     <input type="radio" class="btn-check" name="userType" id="manager" autocomplete="off" checked>
@@ -82,29 +82,29 @@
                     <label class="btn btn-outline-primary" for="employee">Employee</label>
                       
                     <div class="form-floating">
-                      <input type="text" autocomplete="off" name="text" class="input"  id="registrationFullName" placeholder="FullName" required>
+                      <input type="text" autocomplete="off" name="fullname" class="input"  id="registrationFullName" placeholder="FullName" required>
                       
                     
                     </div>
                     <div class="form-floating">
-                      <input type="email" autocomplete="off" name="text" class="input"  id="registrationEmail" placeholder="email" required>
+                      <input type="email" autocomplete="off" name="email" class="input"  id="registrationEmail" placeholder="email" required>
                       
                     </div>
                     
                    <div class="form-floating">
-                    <input type="password" autocomplete="off" name="text" class="input"  id="registrationPassword" placeholder="Password" required>
+                    <input type="password" autocomplete="off" name="password" class="input"  id="registrationPassword" placeholder="Password" required>
                       
                    </div>
                    <div class="form-floating">
-                    <input type="password" autocomplete="off" name="text" class="input"  id="confirmPasswordRegistration" placeholder="Password" required>
+                    <input type="password" autocomplete="off" name="confirmation" class="input"  id="confirmPasswordRegistration" placeholder="Password" required>
                       
                    </div>
 
                    <div class="form-floating">
-                    <input type="tel" autocomplete="off" name="text" class="input"  id="tel" placeholder="phoneNumber" required>  
+                    <input type="tel" autocomplete="off" name="phone" class="input"  id="tel" placeholder="phoneNumber" required>  
                   
                    </div>
-                   <button class="pushable"   type="button" onclick=" example() ">
+                   <button id="registrationBtn" class="pushable" type="submit" onclick=" example(event) ">
                     <span class="shadow"></span>
                     <span class="edge"></span>
                     <span class="front">

@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import bodyParser from "body-parser";
 import bcrypt from 'bcrypt'
 import { client, authenticateUser } from "../modules/database.js";
 import { timeIn, timeOut, deleteUserById, addNewUser } from "../modules/data-service.js";
@@ -10,10 +11,13 @@ const router = express.Router();
 const currentDir = process.cwd();
 
 
+router.use(bodyParser.urlencoded({ extended: true}));
 
 // Route to handle creating a new user
 router.post("/create-user", async (req, res) => {
-    const newUser = req.body;
+    
+    const {confirmation, ...newUser} = req.body;
+    console.log("Received request body:", newUser);
 
     try {
         const createdUser = await createUser(client, newUser);
@@ -88,5 +92,9 @@ router.get('/shift-tracker', authenticateUser, (req, res) => {
 
 router.get('/about-us', (req, res) => {
     res.sendFile(path.resolve(currentDir, 'views', 'aboutUs.html'))
+})
+
+router.get('/create-user', (req, res) => {
+    res.sendFile(path.resolve(currentDir, 'views', 'registrationTest.html'))
 })
 export default router;

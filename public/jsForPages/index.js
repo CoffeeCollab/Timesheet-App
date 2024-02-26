@@ -36,7 +36,11 @@ setInterval(() => {
   sc.style.transform = `rotateZ(${ss}deg)`;
 }, 1000); // Repeat the function every 1000 milliseconds (1 second)
 
-function example() {
+function registrationCheck() {
+  
+}
+
+function example(event) {
   try {
     let fullName = document.getElementById("registrationFullName").value;
     let emailAddress = document.getElementById("registrationEmail").value;
@@ -65,6 +69,7 @@ function example() {
     console.error(error);
     showNotification(error.message);
     // You might display these errors to the user in a more user-friendly way.
+    event.preventDefault(); //prevents to submit the form in case of an error
   }
 }
 function showNotification(message) {

@@ -22,6 +22,8 @@ async function isUserIdExists(userId) {
 
 async function getUserByEmail(email) {
     const result = await client.db(dbName).collection(userCollection).findOne({email: email})
+
+    return result
 }
 
 async function hashPassword(password){
