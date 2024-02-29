@@ -3,7 +3,7 @@ scroll-behavior: smooth;
 padding: 0;
 margin: 0;
 align-items: center;
-background-color: #1d1a39;
+background-color: #fff;
 }
 #header{
 margin:10px;
@@ -16,32 +16,34 @@ border-top: solid 2px #fff;
   
   }
    .col{
-  background-color: #1d1a39;
+  background-color: #fff;
+   color: red;
    border: none;
    min-height: 170px;
    display: flex;
    align-items: center;
    padding: 25px;
-
+   border-bottom: 2px solid red;
+   border-top: 2px solid red;
   }
   
   .col h1 ,h3{
     font-family: 'Bebas Neue', sans-serif; 
-    color: #fff;
+    color: red;
 
   }
   .container{
-  display: flexbox;
+  display: flex;
   flex-direction: column;
   height: 100%;
   margin: 0px;
   padding: 15px;
   position: absolute;
   width: 100%;
-  
+  align-items: center;
+  justify-content: space-between  ;
   }
   .container .col{
-   border: solid #1d1a39 0.5px; 
    min-height: 400px;
    min-width: 275px;
    border-radius: 15px;
@@ -49,16 +51,16 @@ border-top: solid 2px #fff;
 
   a{
   text-decoration: none;
-  color: white;
+  color: red;
   font-size: 1rem;
   margin: 10px;
   transition: all 0.5s ease-in-out;
   margin-left: 25px;
   }
   a:hover{
-  color: whitesmoke;
+  color: rgb(170, 3, 3);
   margin-left: 30px;
-  text-shadow: 3px 4px 0px lightgreen;
+  text-shadow: 3px 4px 0px red;
   }
 
 #right-box{
@@ -66,19 +68,21 @@ border-top: solid 2px #fff;
 background-position: right;
 background-size: contain;
 background-repeat: no-repeat;
-border: solid 1px black;
 height: 150px;
 width: 150px;
 border-radius: 15px;
 }
 
 #loginContainer{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
   background-position:center ;
   background-size: contain;
   background-repeat:  no-repeat;
   width: 100%;
-  margin-left: 110px;
-  background-color: #1d1a39;
+ border: none;
 }
 
 .login-box{
@@ -86,9 +90,9 @@ justify-content: center;
 padding: auto;
 display: flex;
 align-items: center;
-border: solid 1px white;
-box-shadow: 2px 2px 8px 2px white;
-width: 70%;
+border: solid 1px red;
+box-shadow: 1px 1px 2px 1px red;
+width: 60%;
 padding: 20px;
 margin-left: 30%;
 border-radius: 25px;
@@ -133,20 +137,14 @@ text-align: center;
   height: 100%;
   width: 100%;
   border-radius: 8px;
-  background: linear-gradient(
-    to right,
-    hsl(248, 39%, 39%) 0%,
-    hsl(248, 39%, 49%) 8%,
-    hsl(248, 39%, 39%) 92%,
-    hsl(248, 39%, 29%) 100%
-  );
+  background-color: rgb(253, 50, 50);
 }
 
 .front {
   display: block;
   position: relative;
   border-radius: 8px;
-  background: hsl(248, 53%, 58%);
+  background: rgb(252, 104, 104);
   padding: 16px 32px;
   color: white;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
@@ -199,6 +197,7 @@ text-align: center;
   }
   
   .input:focus {
+    border: solid 1px red;
     background-color: white;
     transform: scale(1.05);
     box-shadow: 2px 2px 20px #969696,
@@ -333,34 +332,33 @@ transform: scaleY(0.45);
     padding-left: 200px;
     padding-right: 200px;
     width: 900px;
-    background-color: #1d1a39;
     margin-left: 300px;
     border: solid white 1px;
     border-radius: 25px;
   
   }
   #carouselExample{
-  border: solid black 1px;
-  
+  border: solid red 1px;
+  margin-right: 25px;
   }
   #footer{
    justify-content: space-between;
    min-height: 150px;
    border: none;
-   border-top: solid #fff;
-   background-color: #1d1a39;
-   width: 100%;
-   margin-left: 20%;
+   border-top: solid red;
+   background-color: #fff;
+   width: 1700px;
+   margin-left: 15%;
    margin-right: -10%;
   }
   .left-footer{
-  width: 200px;
+  width: 500px;
   height: 200px;
   float: left;
   text-align: center;
   padding: 40px;
   padding-top: 0;
-  color: white;
+  color: red;
   }
   .left-footer img{
   height: 60px;
@@ -368,9 +366,15 @@ transform: scaleY(0.45);
   }
   .left-footer a{
   margin: 0;
-  color: white;
+  color: red;
+  }
+  .mid-footer{
+  width: 35%;
+  height: 200px;
   }
   .right-footer{
+  width: 500px;
+  height: 200px;
   float: right;
   padding: 15px;
   }
@@ -379,7 +383,7 @@ transform: scaleY(0.45);
   .card {
     width: fit-content;
     height: fit-content;
-    background-color: #1d1a39;
+    background-color: #fff;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -393,7 +397,7 @@ transform: scaleY(0.45);
   .socialContainer {
     width: 52px;
     height: 52px;
-    background-color: rgb(22, 37, 113);
+    background-color: #e91e63;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -453,7 +457,7 @@ transform: scaleY(0.45);
     left:0;
     top:0;
     height:100vh;
-    background-color: #152b4a;
+    background-color: rgb(248, 117, 117);
     z-index:-1;
     opacity:0;
      }
@@ -468,16 +472,14 @@ transform: scaleY(0.45);
     }
   .registrationFormContainer {
     width: 500px;
-    border: solid 2px white;
+    border: solid 3px white;
+    border-radius: 2px;
     z-index:11;
     top: 50%;
     left: 20%;
     position: fixed;
-    background: linear-gradient(to right top, white,#1d1a39);
-    border-radius: 25px;
-    box-shadow:0px 0px 10px 3px white;
+    background: linear-gradient(to right top, rgb(255, 149, 149),rgb(252, 101, 101));
     transform: translate(50%,  -50%);    
-    background-color: white;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -500,9 +502,9 @@ transform: scaleY(0.45);
   }
   .showButton{
   border: none;
-  background-color:#1d1a39;
+  background-color:white;
   font-size: 1em;
-  color: white;
+  color: red;
   margin-top: 25px;
   margin-left: 25px;
   }
