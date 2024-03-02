@@ -67,11 +67,13 @@ async function calculateWorkedHours(client, userId) {
     const user = { _id: userId };
     const projection = { workedDays: { $slice: -1 } };
     const result = await client.db(dbName).collection(collectionName).findOne(user, projection);
+    const workedDaysArray = result.workedDays;
+    const index = workedDaysArray.length - 1;
 
-    const startTime = result.workedDays[0].shift.timeInNum;
+    const startTime = result.workedDays[index].shift.timeInNum;
     console.log("Start time:", startTime, typeof(startTime))
 
-    const endTime = result.workedDays[0].shift.timeOutNum;
+    const endTime = result.workedDays[index].shift.timeOutNum;
     console.log("End time: ", endTime, typeof(endTime))
 
     const timeDifferenceInSeconds = (endTime - startTime) / 1000;
