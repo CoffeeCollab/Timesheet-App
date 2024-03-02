@@ -22,7 +22,7 @@ async function isUserIdExists(userId) {
 
 async function getUserByEmail(client, email) {
     const result = await client.db(dbName).collection(userCollection).findOne({email: email})
-
+    
     return result
 }
 

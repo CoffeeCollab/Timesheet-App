@@ -1,9 +1,9 @@
 import express from "express";
 import path from "path";
 import bodyParser from "body-parser";
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
 import { client, authenticateUser } from "../modules/database.js";
-import { deleteUserById, addNewUser} from "../modules/data-service.js";
+import { deleteUserById, addNewUser, timeIn, timeOut} from "../modules/data-service.js";
 import { createUser, getUserByEmail, getUserByName, getUserBySin } from "../modules/data-service-auth.js";
 
 
@@ -12,6 +12,42 @@ const currentDir = process.cwd();
 
 
 router.use(bodyParser.urlencoded({ extended: true}));
+
+router.post("/time-in", authenticateUser, async (req, res) => {
+    // const userId = req.body.userId;
+    const userId = req.session.user.id
+
+    console.log(userId)
+
+    try {
+        await timeIn(client, userId);
+        res.status(200).json({ message: "Time-in recorded successfully" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+});
+
+
+router.get("/time-in", authenticateUser, (req, res) => {
+    res.sendFile(path.resolve(currentDir, 'views', 'time-in.html'));
+});
+
+router.post("/time-out", authenticateUser, async (req, res) => {
+    const userId = req.session.user.id;
+
+    try {
+        await timeOut(client, userId);
+        res.status(200).json({message: "Time-out recorded successfully"})
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({message: "Internal Server Error"})
+    }
+});
+
+router.get("/time-out", authenticateUser, (req, res) => {
+    res.sendFile(path.resolve(currentDir, 'views', 'time-out.html'))
+})
 
 // Route to handle creating a new user
 router.post("/create-user", async (req, res) => {
@@ -43,7 +79,7 @@ router.post("/login", async (req, res) => {
     const {email, password} = req.body;
 
     try {
-        const user = await getUserByEmail(email)
+        const user = await getUserByEmail(client, email)
         console.log(user)
 
         if(!user) {
@@ -58,11 +94,12 @@ router.post("/login", async (req, res) => {
                 id: user._id,
                 email: user.email,
             }
-            res.status(200).json({message: 'Login successful'});
+            res.sendFile(path.resolve(currentDir, 'views', 'shiftTracker.html'))
         }
         else {
             res.status(401).json({ message: 'Invalid email or password' });
         }
+
 
     } catch (error) {
         console.error('Error during login:', error);
@@ -104,4 +141,7 @@ router.get('/about-us', (req, res) => {
 router.get('/create-user', (req, res) => {
     res.sendFile(path.resolve(currentDir, 'views', 'registrationTest.html'))
 })
+
+
+
 export default router;

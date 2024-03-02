@@ -164,6 +164,49 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+// Post the time on the data base
+document.getElementById("timeInBtn").addEventListener("click", async () => {
+  try {
+      // Make an AJAX request to the server to trigger the time-in action
+      const response = await fetch("/time-in", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: 1 }),
+      });
 
+      if (response.ok) {
+          const data = await response.json();
+          console.log(data.message);
+      } else {
+          console.error("Error recording time-in");
+      }
+  } catch (error) {
+      console.error(error);
+  }
+});
+
+document.getElementById("timeOutBtn").addEventListener("click", async () => {
+  try {
+      // Make an AJAX request to the server to trigger the time-in action
+      const response = await fetch("/time-out", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: 1 }),
+      });
+
+      if (response.ok) {
+          const data = await response.json();
+          console.log(data.message);
+      } else {
+          console.error("Error recording time-in");
+      }
+  } catch (error) {
+      console.error(error);
+  }
+});
 
 
