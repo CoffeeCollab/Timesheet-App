@@ -18,27 +18,41 @@ async function queryAllRecords(client){
     console.log(allRecords)
 }
 
+async function checkLastShift(client, userId){
+  // Check if the user timed-out the last shift
+  const user = { _id: userId };
+  const projection = { workedDays: { $slice: -1 } };
+  const result = await client.db(dbName).collection(collectionName).findOne(user, projection);
+  const workedDaysArray = result.workedDays;
+  const index = workedDaysArray.length - 1;
+  const endTime = result.workedDays[index].shift.timeOutNum;
+
+  console.log(endTime)
+
+  return endTime;
+}
+
 async function timeIn(client, userId) {
-    const currentDate = new Date();
-    const day = currentDate.toLocaleDateString('en-US')
-    const timeIn = currentDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false });
-    const timeInNum = currentDate.getTime();
+  const currentDate = new Date();
+  const day = currentDate.toLocaleDateString('en-US')
+  const timeIn = currentDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false });
+  const timeInNum = currentDate.getTime();
 
-    const user = {_id: userId};
-    const update = {
-        $push: {
-            workedDays: {
-                shift: {
-                    fullDateIn: currentDate,
-                    date: day,
-                    timeIn: timeIn,
-                    timeInNum: timeInNum,
-                }
-            }
-        }
-    }
+  const user = {_id: userId};
+  const update = {
+      $push: {
+          workedDays: {
+              shift: {
+                  fullDateIn: currentDate,
+                  date: day,
+                  timeIn: timeIn,
+                  timeInNum: timeInNum,
+              }
+          }
+      }
+  }
 
-    await client.db(dbName).collection(collectionName).updateOne(user, update)
+  await client.db(dbName).collection(collectionName).updateOne(user, update)
 }
 
 async function timeOut(client, userId) {
@@ -119,4 +133,5 @@ export {
   addNewUser,
   queryAllRecords,
   deleteUserById,
+  checkLastShift
 };

@@ -3,7 +3,7 @@ import path from "path";
 import bodyParser from "body-parser";
 import bcrypt from 'bcrypt';
 import { client, authenticateUser } from "../modules/database.js";
-import { deleteUserById, addNewUser, timeIn, timeOut} from "../modules/data-service.js";
+import { deleteUserById, addNewUser, timeIn, timeOut, checkLastShift} from "../modules/data-service.js";
 import { createUser, getUserByEmail, getUserByName, getUserBySin } from "../modules/data-service-auth.js";
 
 
@@ -18,6 +18,11 @@ router.post("/time-in", authenticateUser, async (req, res) => {
     const userId = req.session.user.id
 
     console.log(userId)
+
+    const shiftCheck = await checkLastShift(client, userId)
+    if (shiftCheck === undefined) {
+        return res.status(400).json({ message: "Previous shift time-out hasn't been recorded" });
+    }
 
     try {
         await timeIn(client, userId);
@@ -37,6 +42,7 @@ router.post("/time-out", authenticateUser, async (req, res) => {
     const userId = req.session.user.id;
 
     try {
+        
         await timeOut(client, userId);
         res.status(200).json({message: "Time-out recorded successfully"})
     } catch (e) {
@@ -75,7 +81,7 @@ router.post("/create-user", async (req, res) => {
     }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/shift-table", async (req, res) => {
     const {email, password} = req.body;
 
     try {

@@ -38,30 +38,28 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("timeInTime").innerHTML = `Your shift started at :${formattedTime}`;
         shift = true;
         isTimeInClicked = true;
-      } else if (isTimeInClicked) {
-        window.alert("You already punched in");
-      }
+      } 
     };
 
     // Event handler for the "Time Out" button click
     document.getElementById("timeOutBtn").onclick = function () {
-      if (shift) {
-        isTimeOutClicked = true;
+      // if (shift) {
+      //   isTimeOutClicked = true;
 
-        // Get the current time
-        endTime = new Date();
+      //   // Get the current time
+      //   endTime = new Date();
 
-        // Format the time as HH:mm:ss
-        formattedTime2 = endTime.toLocaleTimeString();
-        document.getElementById("timeOutTime").innerHTML = `Your shift ended at :${formattedTime2}`
-        shift = false;
-        isTimeInClicked = false;
-        const { totalHours, breakDuration } = totalHourCalculator(startTime, endTime, totalBreakDuration);
-        totalBreakDuration += breakDuration; // Update total break duration
-        window.alert(`You worked for ${parseFloat(totalHours).toFixed(2)} hours. Total break duration: ${totalBreakDuration.toFixed(2)} minutes.`);
-      } else if (!isTimeInClicked) {
-        window.alert("You cannot punch out before you start your shift");
-      }
+      //   // Format the time as HH:mm:ss
+      //   formattedTime2 = endTime.toLocaleTimeString();
+      //   document.getElementById("timeOutTime").innerHTML = `Your shift ended at :${formattedTime2}`
+      //   shift = false;
+      //   isTimeInClicked = false;
+      //   const { totalHours, breakDuration } = totalHourCalculator(startTime, endTime, totalBreakDuration);
+      //   totalBreakDuration += breakDuration; // Update total break duration
+      //   window.alert(`You worked for ${parseFloat(totalHours).toFixed(2)} hours. Total break duration: ${totalBreakDuration.toFixed(2)} minutes.`);
+      // } else if (!isTimeInClicked) {
+      //   window.alert("You cannot punch out before you start your shift");
+      // }
 
 
       // twilio API  for sending sms messages
@@ -177,10 +175,25 @@ document.getElementById("timeInBtn").addEventListener("click", async () => {
       });
 
       if (response.ok) {
-          const data = await response.json();
-          console.log(data.message);
-      } else {
-          console.error("Error recording time-in");
+        const data = await response.json();
+        // Get the current time
+        startTime = new Date();
+
+        // Format the time as HH:mm:ss
+        formattedTime = startTime.toLocaleTimeString();
+        document.getElementById("timeInTime").innerHTML = `Your shift started at :${formattedTime}`;
+        shift = true;
+        isTimeInClicked = true;
+        console.log(data.message);
+      } 
+      else {
+        const errorData = await response.json();
+        if(errorData.message === "Previous shift time-out hasn't been recorded"){
+          alert("Please record the time-out for the previous shift before recording a new time-in.");
+        }
+        else{
+          console.error("Error recording time-in:", errorData.message);
+        }
       }
   } catch (error) {
       console.error(error);
