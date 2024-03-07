@@ -41,6 +41,11 @@ router.get("/time-in", authenticateUser, (req, res) => {
 router.post("/time-out", authenticateUser, async (req, res) => {
     const userId = req.session.user.id;
 
+    const shiftCheck = await checkLastShift(client, userId)
+    if (shiftCheck != undefined) {
+        return res.status(400).json({ message: "You haven't started a shift yet." });
+    }
+
     try {
         
         await timeOut(client, userId);

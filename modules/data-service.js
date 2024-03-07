@@ -32,6 +32,7 @@ async function checkLastShift(client, userId){
   return endTime;
 }
 
+
 async function timeIn(client, userId) {
   const currentDate = new Date();
   const day = currentDate.toLocaleDateString('en-US')
@@ -70,7 +71,11 @@ async function timeOut(client, userId) {
   };
   const options = { arrayFilters: [{ 'day.shift.timeOut': { $exists: false } }] };
 
-  await client.db(dbName).collection(collectionName).updateOne(user, update, options);
+  
+
+  const result = await client.db(dbName).collection(collectionName).updateOne(user, update, options);
+
+  console.log(result)
 
   await calculateWorkedHours(client, userId);
 

@@ -182,8 +182,6 @@ document.getElementById("timeInBtn").addEventListener("click", async () => {
         // Format the time as HH:mm:ss
         formattedTime = startTime.toLocaleTimeString();
         document.getElementById("timeInTime").innerHTML = `Your shift started at :${formattedTime}`;
-        shift = true;
-        isTimeInClicked = true;
         console.log(data.message);
       } 
       else {
@@ -214,8 +212,18 @@ document.getElementById("timeOutBtn").addEventListener("click", async () => {
       if (response.ok) {
           const data = await response.json();
           console.log(data.message);
+          endTime = new Date();
+          
+
+          // Format the time as HH:mm:ss
+          formattedTime = endTime.toLocaleTimeString();
+          document.getElementById("timeOutTime").innerHTML = `Your shift has ended at :${formattedTime}`
       } else {
-          console.error("Error recording time-in");
+        const errorData = await response.json();
+        if(errorData.message === "You haven't started a shift yet."){
+          alert("Please start you shift before you time-out")
+        }
+          console.error("Error recording time-out", errorData.message);
       }
   } catch (error) {
       console.error(error);
