@@ -166,7 +166,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.getElementById("timeInBtn").addEventListener("click", async () => {
   try {
       // Make an AJAX request to the server to trigger the time-in action
-      const response = await fetch("/time-in", {
+      const response = await fetch("/record/time-in", {
           method: "POST",
           headers: {
               "Content-Type": "application/json",
@@ -201,7 +201,7 @@ document.getElementById("timeInBtn").addEventListener("click", async () => {
 document.getElementById("timeOutBtn").addEventListener("click", async () => {
   try {
       // Make an AJAX request to the server to trigger the time-in action
-      const response = await fetch("/time-out", {
+      const response = await fetch("/record/time-out", {
           method: "POST",
           headers: {
               "Content-Type": "application/json",
@@ -232,7 +232,7 @@ document.getElementById("timeOutBtn").addEventListener("click", async () => {
 
 document.getElementById("break").addEventListener("click", async () => {
   try {
-    const response = await fetch("/break-in", {
+    const response = await fetch("/record/break-in", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
@@ -261,7 +261,7 @@ document.getElementById("break").addEventListener("click", async () => {
 
 document.getElementById("break").addEventListener("click", async () => {
   try {
-    const response = await fetch("/break-in", {
+    const response = await fetch("/record/break-in", {
       method: "POST",
       headers: {
         "Content-type": "application/json",
