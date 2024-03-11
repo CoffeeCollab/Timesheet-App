@@ -28,21 +28,21 @@ document.addEventListener("DOMContentLoaded", function () {
     let totalBreakDuration = 0; // Variable to track total break duration
     let isBreakActive = false;
     // Event handler for the "Time In" button click
-    document.getElementById("timeInBtn").onclick = function () {
-      if (!isTimeInClicked) {
-        // Get the current time
-        startTime = new Date();
+    // document.getElementById("timeInBtn").onclick = function () {
+    //   if (!isTimeInClicked) {
+    //     // Get the current time
+    //     startTime = new Date();
 
-        // Format the time as HH:mm:ss
-        formattedTime = startTime.toLocaleTimeString();
-        document.getElementById("timeInTime").innerHTML = `Your shift started at :${formattedTime}`;
-        shift = true;
-        isTimeInClicked = true;
-      } 
-    };
+    //     // Format the time as HH:mm:ss
+    //     formattedTime = startTime.toLocaleTimeString();
+    //     document.getElementById("timeInTime").innerHTML = `Your shift started at :${formattedTime}`;
+    //     shift = true;
+    //     isTimeInClicked = true;
+    //   } 
+    // };
 
     // Event handler for the "Time Out" button click
-    document.getElementById("timeOutBtn").onclick = function () {
+    // document.getElementById("timeOutBtn").onclick = function () {
       // if (shift) {
       //   isTimeOutClicked = true;
 
@@ -64,41 +64,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // twilio API  for sending sms messages
 
-  console.log('Sending confirmation message...');
-  const accountSid = 'AC76be89cce69a7705839035004025d6eb';
-  const authToken = '3b3743d083ccc4b19fbdf18f49473cd6';
-  const twilioPhoneNumber = '+15168149425';
-  const recipientPhoneNumber = '+';
+      // console.log('Sending confirmation message...');
+      // const accountSid = 'AC76be89cce69a7705839035004025d6eb';
+      // const authToken = '3b3743d083ccc4b19fbdf18f49473cd6';
+      // const twilioPhoneNumber = '+15168149425';
+      // const recipientPhoneNumber = '+';
 
-  const message = 'Your shift has ended.';
+      // const message = 'Your shift has ended.';
 
-  fetch(`https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic ' + btoa(`${accountSid}:${authToken}`)
-    },
-    body: new URLSearchParams({
-      'To': recipientPhoneNumber,
-      'From': twilioPhoneNumber,
-      'Body': message
-    })
-  })
-  .then(response => {
-    if (response.ok) {
-      console.log('Message sent successfully.');
-      // Handle success
-    } else {
-      console.error('Failed to send message:', response.status, response.statusText);
-      response.text().then(errorMessage => console.error('Error details:', errorMessage));
-      // Handle error
-    }
-  })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+      // fetch(`https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/x-www-form-urlencoded',
+      //     'Authorization': 'Basic ' + btoa(`${accountSid}:${authToken}`)
+      //   },
+      //   body: new URLSearchParams({
+      //     'To': recipientPhoneNumber,
+      //     'From': twilioPhoneNumber,
+      //     'Body': message
+      //   })
+      // })
+      // .then(response => {
+      //   if (response.ok) {
+      //     console.log('Message sent successfully.');
+      //     // Handle success
+      //   } else {
+      //     console.error('Failed to send message:', response.status, response.statusText);
+      //     response.text().then(errorMessage => console.error('Error details:', errorMessage));
+      //     // Handle error
+      //   }
+      // })
+      //   .catch(error => {
+      //     console.error('Error:', error);
+      //   });
 
-    };
+    // };
 
     // Get the break button element
     const breakButton = document.getElementById("break");
@@ -148,17 +148,17 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Function to calculate total worked hours
-  function totalHourCalculator(startTime, endTime, totalBreakDuration) {
-    const time1InSeconds = startTime.getTime() / 1000;
-    const time2InSeconds = endTime.getTime() / 1000;
+  // function totalHourCalculator(startTime, endTime, totalBreakDuration) {
+  //   const time1InSeconds = startTime.getTime() / 1000;
+  //   const time2InSeconds = endTime.getTime() / 1000;
 
-    let totalHours = (time2InSeconds - time1InSeconds) / 3600;
+  //   let totalHours = (time2InSeconds - time1InSeconds) / 3600;
 
-    // Deduct total break duration from the total hours
-    totalHours -= totalBreakDuration / 60;
+  //   // Deduct total break duration from the total hours
+  //   totalHours -= totalBreakDuration / 60;
 
-    return { totalHours: totalHours.toFixed(2), breakDuration: totalBreakDuration };
-  }
+  //   return { totalHours: totalHours.toFixed(2), breakDuration: totalBreakDuration };
+  // }
 
 });
 
@@ -230,4 +230,60 @@ document.getElementById("timeOutBtn").addEventListener("click", async () => {
   }
 });
 
+document.getElementById("break").addEventListener("click", async () => {
+  try {
+    const response = await fetch("/break-in", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({userId: 1}),
+    });
 
+    if(response.ok) {
+      const data = await response.json();
+      console.log(data.message);
+      breakInTime = new Date();
+
+      formattedTime = breakInTime.toLocaleTimeString();
+      document.getElementById("break").innerHTML = `Your break has started at :${formattedTime}`
+    } else{
+      const errorData = await response.json();
+      if(errorData.message) {
+        alert(errorData.message); 
+      }
+      console.error("Error recording break-in", errorData.message);
+    }
+  } catch (error){
+    console.error(error)
+  }
+});
+
+document.getElementById("break").addEventListener("click", async () => {
+  try {
+    const response = await fetch("/break-in", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({userId: 1}),
+    });
+
+    if(response.ok) {
+      const data = await response.json();
+      console.log(data.message);
+      breakInTime = new Date();
+
+      formattedTime = breakInTime.toLocaleTimeString();
+      document.getElementById("break").innerHTML = `Your break has started at :${formattedTime}`
+    } else{
+      const errorData = await response.json();
+      if(errorData.message) {
+        alert(errorData.message); 
+      }
+      console.error("Error recording break-in", errorData.message);
+    }
+  } catch (error){
+    console.error(error)
+  }
+});

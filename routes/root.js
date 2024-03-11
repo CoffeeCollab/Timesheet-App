@@ -3,7 +3,7 @@ import path from "path";
 import bodyParser from "body-parser";
 import bcrypt from 'bcrypt';
 import { client, authenticateUser } from "../modules/database.js";
-import { deleteUserById, addNewUser, timeIn, timeOut, checkLastShift} from "../modules/data-service.js";
+import { deleteUserById, addNewUser, timeIn, timeOut, checkLastShift, breakIn, breakOut} from "../modules/data-service.js";
 import { createUser, getUserByEmail, getUserByName, getUserBySin } from "../modules/data-service-auth.js";
 
 
@@ -17,10 +17,8 @@ router.post("/time-in", authenticateUser, async (req, res) => {
     // const userId = req.body.userId;
     const userId = req.session.user.id
 
-    console.log(userId)
-
-    const shiftCheck = await checkLastShift(client, userId)
-    if (shiftCheck === undefined) {
+    const lastShift = await checkLastShift(client, userId)
+    if (lastShift.workedHours === undefined) {
         return res.status(400).json({ message: "Previous shift time-out hasn't been recorded" });
     }
 
@@ -34,20 +32,40 @@ router.post("/time-in", authenticateUser, async (req, res) => {
 });
 
 
-router.get("/time-in", authenticateUser, (req, res) => {
-    res.sendFile(path.resolve(currentDir, 'views', 'time-in.html'));
-});
+router.post("/break-in", authenticateUser, async (req, res) => {
+    const userId = req.session.user.id;
+
+    // const shiftCheck = await checkLastShift(client, userId);
+    const lastShift = await checkLastShift(client, userId);
+    if(lastShift.timeInNum != undefined && lastShift.workedHours != undefined){
+        return res.status(400).json({ message: "You haven't started a shift yet." });
+    }
+
+    try{
+        await breakIn(client, userId);
+        res.status(200).json({message: "Break-in recorded successfully"});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+
+})
+
+
 
 router.post("/time-out", authenticateUser, async (req, res) => {
     const userId = req.session.user.id;
 
-    const shiftCheck = await checkLastShift(client, userId)
-    if (shiftCheck != undefined) {
+    const lastShift = await checkLastShift(client, userId)
+    console.log(lastShift)
+    if (lastShift.timeInNum === undefined) {
         return res.status(400).json({ message: "You haven't started a shift yet." });
+    }
+    else if(lastShift.breakInNum != undefined && lastShift.breakOutNum === undefined){
+        return res.status(400).json({ message: "You didn't finish your break. Time-out anyway?" });
     }
 
     try {
-        
         await timeOut(client, userId);
         res.status(200).json({message: "Time-out recorded successfully"})
     } catch (e) {
@@ -55,10 +73,6 @@ router.post("/time-out", authenticateUser, async (req, res) => {
         res.status(500).json({message: "Internal Server Error"})
     }
 });
-
-router.get("/time-out", authenticateUser, (req, res) => {
-    res.sendFile(path.resolve(currentDir, 'views', 'time-out.html'))
-})
 
 // Route to handle creating a new user
 router.post("/create-user", async (req, res) => {
