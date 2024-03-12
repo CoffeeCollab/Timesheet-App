@@ -223,7 +223,7 @@ document.getElementById("timeOutBtn").addEventListener("click", async () => {
         if(errorData.message === "You haven't started a shift yet."){
           alert("Please start you shift before you time-out")
         }
-          console.error("Error recording time-out", errorData.message);
+          console.error(errorData.message);
       }
   } catch (error) {
       console.error(error);
@@ -252,14 +252,14 @@ document.getElementById("break").addEventListener("click", async () => {
       if(errorData.message) {
         alert(errorData.message); 
       }
-      console.error("Error recording break-in", errorData.message);
+      console.error(errorData.message);
     }
   } catch (error){
     console.error(error)
   }
 });
 
-document.getElementById("break").addEventListener("click", async () => {
+document.getElementById("breakInBtn").addEventListener("click", async () => {
   try {
     const response = await fetch("/record/break-in", {
       method: "POST",
@@ -275,13 +275,42 @@ document.getElementById("break").addEventListener("click", async () => {
       breakInTime = new Date();
 
       formattedTime = breakInTime.toLocaleTimeString();
-      document.getElementById("break").innerHTML = `Your break has started at :${formattedTime}`
+      document.getElementById("breakInBtn").innerHTML = `Your break has started at :${formattedTime}`
     } else{
       const errorData = await response.json();
       if(errorData.message) {
         alert(errorData.message); 
       }
-      console.error("Error recording break-in", errorData.message);
+      console.error(errorData.message);
+    }
+  } catch (error){
+    console.error(error)
+  }
+});
+
+document.getElementById("breakOutBtn").addEventListener("click", async () => {
+  try {
+    const response = await fetch("/record/break-out", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({userId: 1}),
+    });
+
+    if(response.ok) {
+      const data = await response.json();
+      console.log(data.message);
+      breakOutTime = new Date();
+
+      formattedTime = breakOutTime.toLocaleTimeString();
+      document.getElementById("breakOutBtn").innerHTML = `Your break has ended at :${formattedTime}`
+    } else{
+      const errorData = await response.json();
+      if(errorData.message) {
+        alert(errorData.message); 
+      }
+      console.error( errorData.message);
     }
   } catch (error){
     console.error(error)

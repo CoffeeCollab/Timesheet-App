@@ -46,6 +46,26 @@ timeRouter.post("/break-in", authenticateUser, async (req, res) => {
 
 })
 
+timeRouter.post("/break-out", authenticateUser, async (req, res) => {
+    const userId = req.session.user.id;
+    const lastShift = await checkLastShift(client, userId);
+
+    if(lastShift.breakInNum === undefined){
+        return res.status(400).json({ message: "You haven't started your break yet." });
+    }
+    else if(lastShift.timeOutNum != undefined){
+        return res.status(400).json({ message: "You haven't started your shift yet." });
+    }
+
+    try{
+        await breakOut(client, userId);
+        res.status(200).json({message: "Break-out recorded successfully"});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+
+})
 
 
 timeRouter.post("/time-out", authenticateUser, async (req, res) => {
