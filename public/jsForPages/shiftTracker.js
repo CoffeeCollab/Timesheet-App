@@ -167,3 +167,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
+document.getElementById("usernameButton").addEventListener("mouseenter", function() {
+  document.getElementById("userInfoBox").classList.add("show");
+});
+document.getElementById("userInfoBox").addEventListener("mouseenter", function() {
+  document.getElementById("userInfoBox").classList.add("show");
+});
+
+document.getElementById("usernameButton").addEventListener("mouseleave", function() {
+  document.getElementById("userInfoBox").classList.remove("show");
+});
+document.getElementById("userInfoBox").addEventListener("mouseleave", function() {
+  document.getElementById("userInfoBox").classList.remove("show");
+});
