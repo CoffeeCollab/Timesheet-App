@@ -28,79 +28,77 @@ document.addEventListener("DOMContentLoaded", function () {
     let totalBreakDuration = 0; // Variable to track total break duration
     let isBreakActive = false;
     // Event handler for the "Time In" button click
-    document.getElementById("timeInBtn").onclick = function () {
-      if (!isTimeInClicked) {
-        // Get the current time
-        startTime = new Date();
+    // document.getElementById("timeInBtn").onclick = function () {
+    //   if (!isTimeInClicked) {
+    //     // Get the current time
+    //     startTime = new Date();
 
-        // Format the time as HH:mm:ss
-        formattedTime = startTime.toLocaleTimeString();
-        document.getElementById("timeInTime").innerHTML = `Your shift started at :${formattedTime}`;
-        shift = true;
-        isTimeInClicked = true;
-      } else if (isTimeInClicked) {
-        window.alert("You already punched in");
-      }
-    };
+    //     // Format the time as HH:mm:ss
+    //     formattedTime = startTime.toLocaleTimeString();
+    //     document.getElementById("timeInTime").innerHTML = `Your shift started at :${formattedTime}`;
+    //     shift = true;
+    //     isTimeInClicked = true;
+    //   } 
+    // };
 
     // Event handler for the "Time Out" button click
-    document.getElementById("timeOutBtn").onclick = function () {
-      if (shift) {
-        isTimeOutClicked = true;
+    // document.getElementById("timeOutBtn").onclick = function () {
+      // if (shift) {
+      //   isTimeOutClicked = true;
 
-        // Get the current time
-        endTime = new Date();
+      //   // Get the current time
+      //   endTime = new Date();
 
-        // Format the time as HH:mm:ss
-        formattedTime2 = endTime.toLocaleTimeString();
-        document.getElementById("timeOutTime").innerHTML = `Your shift ended at :${formattedTime2}`
-        shift = false;
-        isTimeInClicked = false;
-        const { totalHours, breakDuration } = totalHourCalculator(startTime, endTime, totalBreakDuration);
-        totalBreakDuration += breakDuration; // Update total break duration
-        window.alert(`You worked for ${parseFloat(totalHours).toFixed(2)} hours. Total break duration: ${totalBreakDuration.toFixed(2)} minutes.`);
-      } else if (!isTimeInClicked) {
-        window.alert("You cannot punch out before you start your shift");
-      }
+      //   // Format the time as HH:mm:ss
+      //   formattedTime2 = endTime.toLocaleTimeString();
+      //   document.getElementById("timeOutTime").innerHTML = `Your shift ended at :${formattedTime2}`
+      //   shift = false;
+      //   isTimeInClicked = false;
+      //   const { totalHours, breakDuration } = totalHourCalculator(startTime, endTime, totalBreakDuration);
+      //   totalBreakDuration += breakDuration; // Update total break duration
+      //   window.alert(`You worked for ${parseFloat(totalHours).toFixed(2)} hours. Total break duration: ${totalBreakDuration.toFixed(2)} minutes.`);
+      // } else if (!isTimeInClicked) {
+      //   window.alert("You cannot punch out before you start your shift");
+      // }
 
 
       // twilio API  for sending sms messages
 
-  console.log('Sending confirmation message...');
-  const accountSid = 'AC76be89cce69a7705839035004025d6eb';
-  const authToken = '3b3743d083ccc4b19fbdf18f49473cd6';
-  const twilioPhoneNumber = '+15168149425';
-  const recipientPhoneNumber = '+';
+      // console.log('Sending confirmation message...');
+      // const accountSid = 'AC76be89cce69a7705839035004025d6eb';
+      // const authToken = '3b3743d083ccc4b19fbdf18f49473cd6';
+      // const twilioPhoneNumber = '+15168149425';
+      // const recipientPhoneNumber = '+';
 
-  const message = 'Your shift has ended.';
+      // const message = 'Your shift has ended.';
 
-  fetch(`https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-      'Authorization': 'Basic ' + btoa(`${accountSid}:${authToken}`)
-    },
-    body: new URLSearchParams({
-      'To': recipientPhoneNumber,
-      'From': twilioPhoneNumber,
-      'Body': message
-    })
-  })
-  .then(response => {
-    if (response.ok) {
-      console.log('Message sent successfully.');
-      // Handle success
-    } else {
-      console.error('Failed to send message:', response.status, response.statusText);
-      response.text().then(errorMessage => console.error('Error details:', errorMessage));
-      // Handle error
-    }
-  })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+      // fetch(`https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages`, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/x-www-form-urlencoded',
+      //     'Authorization': 'Basic ' + btoa(`${accountSid}:${authToken}`)
+      //   },
+      //   body: new URLSearchParams({
+      //     'To': recipientPhoneNumber,
+      //     'From': twilioPhoneNumber,
+      //     'Body': message
+      //   })
+      // })
+      // .then(response => {
+      //   if (response.ok) {
+      //     console.log('Message sent successfully.');
+      //     // Handle success
+      //   } else {
+      //     console.error('Failed to send message:', response.status, response.statusText);
+      //     response.text().then(errorMessage => console.error('Error details:', errorMessage));
+      //     // Handle error
+      //   }
+      // })
+      //   .catch(error => {
+      //     console.error('Error:', error);
+      //   });
 
-    };
+    // };
 
     // Get the break button element
     const breakButton = document.getElementById("break");
@@ -150,33 +148,20 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Function to calculate total worked hours
-  function totalHourCalculator(startTime, endTime, totalBreakDuration) {
-    const time1InSeconds = startTime.getTime() / 1000;
-    const time2InSeconds = endTime.getTime() / 1000;
+  // function totalHourCalculator(startTime, endTime, totalBreakDuration) {
+  //   const time1InSeconds = startTime.getTime() / 1000;
+  //   const time2InSeconds = endTime.getTime() / 1000;
 
-    let totalHours = (time2InSeconds - time1InSeconds) / 3600;
+  //   let totalHours = (time2InSeconds - time1InSeconds) / 3600;
 
-    // Deduct total break duration from the total hours
-    totalHours -= totalBreakDuration / 60;
+  //   // Deduct total break duration from the total hours
+  //   totalHours -= totalBreakDuration / 60;
 
-    return { totalHours: totalHours.toFixed(2), breakDuration: totalBreakDuration };
-  }
+  //   return { totalHours: totalHours.toFixed(2), breakDuration: totalBreakDuration };
+  // }
 
 });
 
 
 
 
-document.getElementById("usernameButton").addEventListener("mouseenter", function() {
-  document.getElementById("userInfoBox").classList.add("show");
-});
-document.getElementById("userInfoBox").addEventListener("mouseenter", function() {
-  document.getElementById("userInfoBox").classList.add("show");
-});
-
-document.getElementById("usernameButton").addEventListener("mouseleave", function() {
-  document.getElementById("userInfoBox").classList.remove("show");
-});
-document.getElementById("userInfoBox").addEventListener("mouseleave", function() {
-  document.getElementById("userInfoBox").classList.remove("show");
-});

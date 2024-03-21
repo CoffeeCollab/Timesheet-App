@@ -1,9 +1,10 @@
 import express from "express";
 import path from "path";
 import bodyParser from "body-parser";
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcrypt';
+import timeRouter from "./timeRoutes.js";
 import { client, authenticateUser } from "../modules/database.js";
-import { deleteUserById, addNewUser} from "../modules/data-service.js";
+import { deleteUserById, addNewUser, timeIn, timeOut, checkLastShift, breakIn, breakOut} from "../modules/data-service.js";
 import { createUser, getUserByEmail, getUserByName, getUserBySin } from "../modules/data-service-auth.js";
 
 
@@ -39,11 +40,11 @@ router.post("/create-user", async (req, res) => {
     }
 });
 
-router.post("/login", async (req, res) => {
+router.post("/shift-table", async (req, res) => {
     const {email, password} = req.body;
 
     try {
-        const user = await getUserByEmail(email)
+        const user = await getUserByEmail(client, email)
         console.log(user)
 
         if(!user) {
@@ -58,11 +59,12 @@ router.post("/login", async (req, res) => {
                 id: user._id,
                 email: user.email,
             }
-            res.status(200).json({message: 'Login successful'});
+            res.sendFile(path.resolve(currentDir, 'views', 'shiftTracker.html'))
         }
         else {
             res.status(401).json({ message: 'Invalid email or password' });
         }
+
 
     } catch (error) {
         console.error('Error during login:', error);
@@ -104,4 +106,7 @@ router.get('/about-us', (req, res) => {
 router.get('/create-user', (req, res) => {
     res.sendFile(path.resolve(currentDir, 'views', 'registrationTest.html'))
 })
+
+router.use("/record", timeRouter);
+
 export default router;

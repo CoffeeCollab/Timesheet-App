@@ -23,7 +23,7 @@ const sessionSecret = 'htsagara';
 app.use(session({
     secret: sessionSecret,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
 }))
 
 // Call the connectToDatabase function to establish the connection

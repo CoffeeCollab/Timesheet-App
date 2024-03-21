@@ -18,45 +18,94 @@ async function queryAllRecords(client){
     console.log(allRecords)
 }
 
+async function checkLastShift(client, userId){
+  // Check if the user timed-out the last shift
+  const user = { _id: userId };
+  const projection = { workedDays: { $slice: -1 } };
+  const result = await client.db(dbName).collection(collectionName).findOne(user, projection);
+  const workedDaysArray = result.workedDays;
+  const index = workedDaysArray.length - 1;
+  //const endTime = result.workedDays[index].shift.timeOutNum;
+
+  return result.workedDays[index].shift;
+}
+
+
 async function timeIn(client, userId) {
-    const currentDate = new Date();
-    const day = currentDate.toLocaleDateString('en-US')
-    const timeIn = currentDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false });
-    const timeInNum = currentDate.getTime();
+  const currentDate = new Date();
+  const timeInNum = currentDate.getTime();
 
-    const user = {_id: userId};
-    const update = {
-        $push: {
-            workedDays: {
-                shift: {
-                    fullDateIn: currentDate,
-                    date: day,
-                    timeIn: timeIn,
-                    timeInNum: timeInNum,
-                }
-            }
+  const user = {_id: userId};
+  const update = {
+      $push: {
+          workedDays: {
+              shift: {
+                  fullDateIn: currentDate,
+                  timeInNum: timeInNum,
+              }
+          }
+      }
+  }
+
+  await client.db(dbName).collection(collectionName).updateOne(user, update)
+}
+
+async function breakIn(client, userId) {
+  const currentDate = new Date();
+  const breakInNum = currentDate.getTime();
+  const user = {_id: userId};
+
+  const update = {
+    $push: {
+      workedDays: {
+        shift: {
+          fullBreakIn: currentDate,
+          breakInNum: breakInNum,
         }
+      }
     }
+  }
 
-    await client.db(dbName).collection(collectionName).updateOne(user, update)
+  await client.db(dbName).collection(collectionName).updateOne(user, update)
+}
+
+async function breakOut(client, userId){
+  const currentDate = new Date();
+  const breakOutNum = currentDate.getTime();
+  const user = {_id: userId};
+
+  const update = {
+    $push: {
+      workedDays: {
+        shift: {
+          fullBreakOut: currentDate,
+          breakOutNum: breakOutNum,
+        }
+      }
+    }
+  }
+
+  await client.db(dbName).collection(collectionName).updateOne(user, update)
 }
 
 async function timeOut(client, userId) {
   const currentDate = new Date();
-  const timeOut = currentDate.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: false });
   const timeOutNum = currentDate.getTime();
 
   const user = { _id: userId };
   const update = {
     $set: {
       'workedDays.$[day].shift.fullDateOut': currentDate,
-      'workedDays.$[day].shift.timeOut': timeOut,
       'workedDays.$[day].shift.timeOutNum': timeOutNum,
     },
   };
   const options = { arrayFilters: [{ 'day.shift.timeOut': { $exists: false } }] };
 
-  await client.db(dbName).collection(collectionName).updateOne(user, update, options);
+  
+
+  const result = await client.db(dbName).collection(collectionName).updateOne(user, update, options);
+
+  console.log(result)
 
   await calculateWorkedHours(client, userId);
 
@@ -67,11 +116,13 @@ async function calculateWorkedHours(client, userId) {
     const user = { _id: userId };
     const projection = { workedDays: { $slice: -1 } };
     const result = await client.db(dbName).collection(collectionName).findOne(user, projection);
+    const workedDaysArray = result.workedDays;
+    const index = workedDaysArray.length - 1;
 
-    const startTime = result.workedDays[0].shift.timeInNum;
+    const startTime = result.workedDays[index].shift.timeInNum;
     console.log("Start time:", startTime, typeof(startTime))
 
-    const endTime = result.workedDays[0].shift.timeOutNum;
+    const endTime = result.workedDays[index].shift.timeOutNum;
     console.log("End time: ", endTime, typeof(endTime))
 
     const timeDifferenceInSeconds = (endTime - startTime) / 1000;
@@ -110,6 +161,8 @@ async function deleteUserById(client, userId) {
     }
 }
 
+
+
 export {
   timeIn,
   timeOut,
@@ -117,4 +170,7 @@ export {
   addNewUser,
   queryAllRecords,
   deleteUserById,
+  checkLastShift,
+  breakIn,
+  breakOut
 };
