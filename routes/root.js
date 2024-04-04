@@ -12,6 +12,7 @@ import {
 } from "../modules/data-service-auth.js";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
+import requireAuth from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 const currentDir = process.cwd();
@@ -112,11 +113,11 @@ router.get("/", (req, res) => {
   res.sendFile(path.resolve(currentDir, "views", "index.html"));
 });
 
-router.get("/shift-table", authenticateUser, (req, res) => {
+router.get("/shift-table", requireAuth, (req, res) => {
   res.sendFile(path.resolve(currentDir, "views", "shiftTable.html"));
 });
 
-router.get("/shift-tracker", authenticateUser, (req, res) => {
+router.get("/shift-tracker", requireAuth, (req, res) => {
   res.sendFile(path.resolve(currentDir, "views", "shiftTracker.html"));
 });
 
@@ -126,6 +127,10 @@ router.get("/about-us", (req, res) => {
 
 router.get("/create-user", (req, res) => {
   res.sendFile(path.resolve(currentDir, "views", "registrationTest.html"));
+});
+
+router.get("/logout", (req, res) => {
+  res.cookie("jwt", "", { maxAge: 1 }).redirect("/");
 });
 
 router.use("/record", timeRouter);
