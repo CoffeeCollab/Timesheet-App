@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // };
 
     // Get the break button element
-    const breakButton = document.getElementById("break");
+    const breakButton = document.getElementById("breakInBtn");
 
     // Event listener for the "Break" button click
     breakButton.addEventListener("click", event => {
@@ -230,7 +230,7 @@ document.getElementById("timeOutBtn").addEventListener("click", async () => {
   }
 });
 
-document.getElementById("break").addEventListener("click", async () => {
+document.getElementById("breakInBtn").addEventListener("click", async () => {
   try {
     const response = await fetch("/record/break-in", {
       method: "POST",
@@ -316,3 +316,34 @@ document.getElementById("breakOutBtn").addEventListener("click", async () => {
     console.error(error)
   }
 });
+
+// div box affect 
+document.getElementById("usernameButton").addEventListener("mouseenter", function() {
+  document.getElementById("userInfoBox").classList.add("show");
+});
+
+document.getElementById("usernameButton").addEventListener("mouseleave", function() {
+  document.getElementById("userInfoBox").classList.remove("show");
+});
+// light & dark mode
+
+// Check if the user has already set a preference for dark mode
+const isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+// Function to toggle dark mode
+const toggleDarkMode = () => {
+  // Toggle the 'dark' class on the body element
+  document.body.classList.toggle('dark');
+  
+  // Store the current mode preference in localStorage
+  const currentMode = document.body.classList.contains('dark');
+  localStorage.setItem('darkMode', currentMode);
+};
+
+// Add event listener to the theme button
+document.querySelector('.themeBtn').addEventListener('click', toggleDarkMode);
+
+// Apply dark mode if it was previously set
+if (isDarkMode) {
+  document.body.classList.add('dark');
+}
