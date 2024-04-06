@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // };
 
     // Get the break button element
-    const breakButton = document.getElementById("break");
+    const breakButton = document.getElementById("breakInBtn");
 
     // Event listener for the "Break" button click
     breakButton.addEventListener("click", event => {
@@ -162,6 +162,188 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
+// Post the time on the data base
+document.getElementById("timeInBtn").addEventListener("click", async () => {
+  try {
+      // Make an AJAX request to the server to trigger the time-in action
+      const response = await fetch("/record/time-in", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: 1 }),
+      });
 
+      if (response.ok) {
+        const data = await response.json();
+        // Get the current time
+        startTime = new Date();
 
+        // Format the time as HH:mm:ss
+        formattedTime = startTime.toLocaleTimeString();
+        document.getElementById("timeInTime").innerHTML = `Your shift started at :${formattedTime}`;
+        console.log(data.message);
+      } 
+      else {
+        const errorData = await response.json();
+        if(errorData.message === "Previous shift time-out hasn't been recorded"){
+          alert("Please record the time-out for the previous shift before recording a new time-in.");
+        }
+        else{
+          console.error("Error recording time-in:", errorData.message);
+        }
+      }
+  } catch (error) {
+      console.error(error);
+  }
+});
 
+document.getElementById("timeOutBtn").addEventListener("click", async () => {
+  try {
+      // Make an AJAX request to the server to trigger the time-in action
+      const response = await fetch("/record/time-out", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: 1 }),
+      });
+
+      if (response.ok) {
+          const data = await response.json();
+          console.log(data.message);
+          endTime = new Date();
+          
+
+          // Format the time as HH:mm:ss
+          formattedTime = endTime.toLocaleTimeString();
+          document.getElementById("timeOutTime").innerHTML = `Your shift has ended at :${formattedTime}`
+      } else {
+        const errorData = await response.json();
+        if(errorData.message === "You haven't started a shift yet."){
+          alert("Please start you shift before you time-out")
+        }
+          console.error(errorData.message);
+      }
+  } catch (error) {
+      console.error(error);
+  }
+});
+
+document.getElementById("breakInBtn").addEventListener("click", async () => {
+  try {
+    const response = await fetch("/record/break-in", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({userId: 1}),
+    });
+
+    if(response.ok) {
+      const data = await response.json();
+      console.log(data.message);
+      breakInTime = new Date();
+
+      formattedTime = breakInTime.toLocaleTimeString();
+      document.getElementById("break").innerHTML = `Your break has started at :${formattedTime}`
+    } else{
+      const errorData = await response.json();
+      if(errorData.message) {
+        alert(errorData.message); 
+      }
+      console.error(errorData.message);
+    }
+  } catch (error){
+    console.error(error)
+  }
+});
+
+document.getElementById("breakInBtn").addEventListener("click", async () => {
+  try {
+    const response = await fetch("/record/break-in", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({userId: 1}),
+    });
+
+    if(response.ok) {
+      const data = await response.json();
+      console.log(data.message);
+      breakInTime = new Date();
+
+      formattedTime = breakInTime.toLocaleTimeString();
+      document.getElementById("breakInBtn").innerHTML = `Your break has started at :${formattedTime}`
+    } else{
+      const errorData = await response.json();
+      if(errorData.message) {
+        alert(errorData.message); 
+      }
+      console.error(errorData.message);
+    }
+  } catch (error){
+    console.error(error)
+  }
+});
+
+document.getElementById("breakOutBtn").addEventListener("click", async () => {
+  try {
+    const response = await fetch("/record/break-out", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({userId: 1}),
+    });
+
+    if(response.ok) {
+      const data = await response.json();
+      console.log(data.message);
+      breakOutTime = new Date();
+
+      formattedTime = breakOutTime.toLocaleTimeString();
+      document.getElementById("breakOutBtn").innerHTML = `Your break has ended at :${formattedTime}`
+    } else{
+      const errorData = await response.json();
+      if(errorData.message) {
+        alert(errorData.message); 
+      }
+      console.error( errorData.message);
+    }
+  } catch (error){
+    console.error(error)
+  }
+});
+
+// div box affect 
+document.getElementById("usernameButton").addEventListener("mouseenter", function() {
+  document.getElementById("userInfoBox").classList.add("show");
+});
+
+document.getElementById("usernameButton").addEventListener("mouseleave", function() {
+  document.getElementById("userInfoBox").classList.remove("show");
+});
+// light & dark mode
+
+// Check if the user has already set a preference for dark mode
+const isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+// Function to toggle dark mode
+const toggleDarkMode = () => {
+  // Toggle the 'dark' class on the body element
+  document.body.classList.toggle('dark');
+  
+  // Store the current mode preference in localStorage
+  const currentMode = document.body.classList.contains('dark');
+  localStorage.setItem('darkMode', currentMode);
+};
+
+// Add event listener to the theme button
+document.querySelector('.themeBtn').addEventListener('click', toggleDarkMode);
+
+// Apply dark mode if it was previously set
+if (isDarkMode) {
+  document.body.classList.add('dark');
+}

@@ -12,29 +12,8 @@ form.addEventListener('submit', e => {
   // Add a class to indicate that the form has been validated
   form.classList.add('was-validated');
 });
-// the code above will be fixed by evrim, it doesn't work right now!!!
 
 
-// Code for updating the clock every second using setInterval
-setInterval(() => {
-  // Select the hour, minute, and second elements
-  let hr = document.querySelector("#hr");
-  let mn = document.querySelector("#mn");
-  let sc = document.querySelector("#sc");
-
-  // Get the current date and time
-  let day = new Date();
-
-  // Calculate the degrees for hour, minute, and second hands
-  let hh = day.getHours() * 30;
-  let mm = day.getMinutes() * 6;
-  let ss = day.getSeconds() * 6;
-
-  // Update the CSS transform property for each clock hand
-  hr.style.transform = `rotateZ(${hh + (mm / 12)}deg)`;
-  mn.style.transform = `rotateZ(${mm}deg)`;
-  sc.style.transform = `rotateZ(${ss}deg)`;
-}, 1000); // Repeat the function every 1000 milliseconds (1 second)
 
 function registrationCheck() {
   
@@ -171,3 +150,25 @@ function closeModal() {
 }
 
 
+// light & dark mode
+
+// Check if the user has already set a preference for dark mode
+const isDarkMode = localStorage.getItem('darkMode') === 'true';
+
+// Function to toggle dark mode
+const toggleDarkMode = () => {
+  // Toggle the 'dark' class on the body element
+  document.body.classList.toggle('dark');
+  
+  // Store the current mode preference in localStorage
+  const currentMode = document.body.classList.contains('dark');
+  localStorage.setItem('darkMode', currentMode);
+};
+
+// Add event listener to the theme button
+document.querySelector('.themeBtn').addEventListener('click', toggleDarkMode);
+
+// Apply dark mode if it was previously set
+if (isDarkMode) {
+  document.body.classList.add('dark');
+}
