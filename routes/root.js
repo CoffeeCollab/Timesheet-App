@@ -3,7 +3,7 @@ import path from "path";
 import bodyParser from "body-parser";
 import bcrypt from "bcrypt";
 import timeRouter from "./timeRoutes.js";
-import { client, authenticateUser } from "../modules/database.js";
+import { client } from "../modules/database.js";
 import { deleteUserById, addNewUser } from "../modules/data-service.js";
 import {
   createUser,
@@ -12,7 +12,7 @@ import {
 } from "../modules/data-service-auth.js";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
-import requireAuth from "../middleware/authMiddleware.js";
+import { requireAuth } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 const currentDir = process.cwd();
@@ -50,9 +50,7 @@ router.post("/create-user", async (req, res) => {
 
     res
       .cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
-      .status(200)
-      .json({ message: "User created successfully" })
-      .sendFile(path.resolve(currentDir, "views", "shiftTracker.html"));
+      .redirect("/shift-tracker");
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -73,13 +71,7 @@ router.post("/shift-table", async (req, res) => {
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (passwordMatch) {
-      req.session.user = {
-        id: user._id,
-        email: user.email,
-      };
-
       const token = createToken(user._id);
-
       res
         .cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
         .sendFile(path.resolve(currentDir, "views", "shiftTracker.html"));
@@ -113,14 +105,6 @@ router.get("/", (req, res) => {
   res.sendFile(path.resolve(currentDir, "views", "index.html"));
 });
 
-router.get("/shift-table", requireAuth, (req, res) => {
-  res.sendFile(path.resolve(currentDir, "views", "shiftTable.html"));
-});
-
-router.get("/shift-tracker", requireAuth, (req, res) => {
-  res.sendFile(path.resolve(currentDir, "views", "shiftTracker.html"));
-});
-
 router.get("/about-us", (req, res) => {
   res.sendFile(path.resolve(currentDir, "views", "aboutUs.html"));
 });
@@ -131,6 +115,10 @@ router.get("/create-user", (req, res) => {
 
 router.get("/logout", (req, res) => {
   res.cookie("jwt", "", { maxAge: 1 }).redirect("/");
+});
+
+router.get("/shift-tracker", requireAuth, (req, res) => {
+  res.sendFile(path.resolve(currentDir, "views", "shiftTracker.html"));
 });
 
 router.use("/record", timeRouter);
