@@ -29,22 +29,18 @@ async function checkLastShift(client, userId) {
   // Check if the user timed-out the last shift
   const user = { _id: userId };
   const projection = { workedDays: { $slice: -1 } };
-  const stringifiedProjection = JSON.stringify(projection); // Convert the object to a string
-  console.log(stringifiedProjection);
-  console.log(`projection: ${JSON.stringify(projection)}`);
-  console.log(`projection ${projection}`);
   const result = await client
     .db(dbName)
     .collection(collectionName)
     .findOne(user, projection);
-  console.log(result.workedDays === undefined);
-  const workedDaysArray = result.workedDays || [];
-  const index = workedDaysArray.length - 1 < 0 ? 0 : workedDaysArray.length - 1;
-  //const endTime = result.workedDays[index].shift.timeOutNum;
+  if (result.workedDays != undefined) {
+    const workedDaysArray = result.workedDays;
+    const index = workedDaysArray.length - 1;
 
-  return result.workedDays === undefined
-    ? null
-    : result.workedDays[index].shift;
+    return result.workedDays[index].shift;
+  } else {
+    return null;
+  }
 }
 
 async function timeIn(client, userId) {
@@ -72,13 +68,9 @@ async function breakIn(client, userId) {
   const user = { _id: userId };
 
   const update = {
-    $push: {
-      workedDays: {
-        shift: {
-          fullBreakIn: currentDate,
-          breakInNum: breakInNum,
-        },
-      },
+    $set: {
+      "workedDays.$[day].shift.fullDateBreakIn": currentDate,
+      "workedDays.$[day].shift.breakInNum": breakInNum,
     },
   };
 
@@ -125,6 +117,7 @@ async function timeOut(client, userId) {
     .updateOne(user, update, options);
 
   console.log(result);
+  console.log("time-out recorded");
 
   await calculateWorkedHours(client, userId);
 }

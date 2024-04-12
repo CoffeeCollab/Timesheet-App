@@ -36,8 +36,8 @@ timeRouter.post("/time-in", checkUser, async (req, res) => {
   }
 });
 
-timeRouter.post("/break-in", requireAuth, async (req, res) => {
-  const userId = req.session.user.id;
+timeRouter.post("/break-in", checkLastShift, async (req, res) => {
+  const userId = res.locals.user._id;
 
   // const shiftCheck = await checkLastShift(client, userId);
   const lastShift = await checkLastShift(client, userId);
@@ -65,8 +65,8 @@ timeRouter.post("/break-in", requireAuth, async (req, res) => {
   }
 });
 
-timeRouter.post("/break-out", requireAuth, async (req, res) => {
-  const userId = req.session.user.id;
+timeRouter.post("/break-out", checkLastShift, async (req, res) => {
+  const userId = res.locals.user._id;
   const lastShift = await checkLastShift(client, userId);
 
   if (lastShift) {
@@ -98,12 +98,11 @@ timeRouter.post("/time-out", checkUser, async (req, res) => {
   const userId = res.locals.user._id;
 
   const lastShift = await checkLastShift(client, userId);
-  console.log(lastShift);
 
-  if (!lastShift || lastShift.timeInNum === undefined) {
-    return res
-      .status(400)
-      .json({ message: "You haven't started a shift yet." });
+  if (!lastShift || lastShift.timeOutNum) {
+    return res.status(400).json({
+      message: "Please start a new shift",
+    });
   } else if (
     lastShift.breakInNum != undefined &&
     lastShift.breakOutNum === undefined
@@ -111,6 +110,8 @@ timeRouter.post("/time-out", checkUser, async (req, res) => {
     return res
       .status(400)
       .json({ message: "You didn't finish your break. Time-out anyway?" });
+  } else if (!lastShift) {
+    return res.status(400).json({ message: "Please start your shift" });
   }
 
   try {
