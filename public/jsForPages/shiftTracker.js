@@ -55,16 +55,16 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       // Check if the user has punched in
-      if (isTimeInClicked) {
-        // If the break is not active, start the break; otherwise, end the break
-        if (!isBreakActive) {
-          breakActive();
-        } else {
-          endBreak();
-        }
-      } else if (!isTimeInClicked) {
-        window.alert("You cannot take a break before you punch in");
-      }
+      // if (isTimeInClicked) {
+      //   // If the break is not active, start the break; otherwise, end the break
+      //   if (!isBreakActive) {
+      //     breakActive();
+      //   } else {
+      //     endBreak();
+      //   }
+      // } else if (!isTimeInClicked) {
+      //   window.alert("You cannot take a break before you punch in");
+      // }
     });
   } catch (err) {
     console.error(err);
@@ -149,37 +149,6 @@ document.getElementById("breakInBtn").addEventListener("click", async () => {
       formattedTime = breakInTime.toLocaleTimeString();
       document.getElementById(
         "break"
-      ).innerHTML = `Your break has started at :${formattedTime}`;
-    } else {
-      const errorData = await response.json();
-      if (errorData.message) {
-        alert(errorData.message);
-      }
-      console.error(errorData.message);
-    }
-  } catch (error) {
-    console.error(error);
-  }
-});
-
-document.getElementById("breakInBtn").addEventListener("click", async () => {
-  try {
-    const response = await fetch("/record/break-in", {
-      method: "POST",
-      headers: {
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({ userId: 1 }),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data.message);
-      breakInTime = new Date();
-
-      formattedTime = breakInTime.toLocaleTimeString();
-      document.getElementById(
-        "breakInBtn"
       ).innerHTML = `Your break has started at :${formattedTime}`;
     } else {
       const errorData = await response.json();
