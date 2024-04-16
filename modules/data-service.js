@@ -1,9 +1,4 @@
-import {
-  client,
-  dbName,
-  collectionName,
-  connectToDatabase,
-} from "./database.js";
+import { client, dbName, collectionName } from "./database.js";
 
 // Call the connectToDatabase function to establish the connection
 // connectToDatabase();

@@ -12,17 +12,17 @@
       <div class="header">
         <div class="left-box">
           <img src="/pictures/waiter.png" alt="" />
-          <button id="usernameButton"><p>Evrim Ciftci</p></button>
+          <button id="usernameButton"><p><%= userName %></p></button>
           <div id="userInfoBox">
             <div class="companyInfo">
               <span id="company">Company: CoffeeCollab </span>
-              <span id="manager">Manager: Henrique sagara </span>
+              <!-- <span id="manager">Manager: Henrique sagara </span> -->
             </div>
             <div class="userInfo">
-              <span id="firstName">First Name: Evrim </span>
-              <span id="lastName">Last Name: Ciftci </span>
-              <span id=" email">email: exampleemail@gmail.com </span>
-              <span id="phoneNumber">Phone Number: +1 6558 5885 58 </span>
+              <span id="firstName">Name: <%=userName%> </span>
+              <!-- <span id="lastName">Last Name: Ciftci </span> -->
+              <span id=" email">email: <%=userEmail%> </span>
+              <span id="phoneNumber">Phone Number: <%= userPhone%> </span>
             </div>
           </div>
         </div>

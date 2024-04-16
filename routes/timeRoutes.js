@@ -21,7 +21,7 @@ timeRouter.post("/time-in", checkUser, async (req, res) => {
   const lastShift = await checkLastShift(client, userId);
   if (lastShift) {
     console.log(`Last shift ${lastShift}`);
-    if (lastShift.workedHours === undefined) {
+    if (lastShift.shift.workedHours === undefined) {
       console.log(`Last shift worked hours ${lastShift.workedHours}`);
       return res
         .status(400)
@@ -114,13 +114,13 @@ timeRouter.post("/time-out", checkUser, async (req, res) => {
 
   const lastShift = await checkLastShift(client, userId);
 
-  if (!lastShift || lastShift.timeOutNum) {
+  if (!lastShift || lastShift.shift.timeOutNum) {
     return res.status(400).json({
       message: "Please start a new shift",
     });
   } else if (
-    lastShift.breakInNum != undefined &&
-    lastShift.breakOutNum === undefined
+    lastShift.shift.breakInNum != undefined &&
+    lastShift.shift.breakOutNum === undefined
   ) {
     return res
       .status(400)

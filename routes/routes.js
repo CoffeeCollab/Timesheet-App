@@ -9,10 +9,11 @@ import {
   createUser,
   getUserByEmail,
   getUserByName,
+  getUserBySin,
 } from "../modules/data-service-auth.js";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
-import { requireAuth } from "../middleware/authMiddleware.js";
+import { checkUser } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 const currentDir = process.cwd();
@@ -57,7 +58,7 @@ router.post("/create-user", async (req, res) => {
   }
 });
 
-router.post("/shift-table", async (req, res) => {
+router.post("/shift-tracker", async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -74,7 +75,7 @@ router.post("/shift-table", async (req, res) => {
       const token = createToken(user._id);
       res
         .cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 })
-        .sendFile(path.resolve(currentDir, "views", "shiftTracker.html"));
+        .sendFile(path.resolve(currentDir, "views", "shiftTracker.ejs"));
     } else {
       res.status(401).json({ message: "Invalid password" });
     }
@@ -117,8 +118,16 @@ router.get("/logout", (req, res) => {
   res.cookie("jwt", "", { maxAge: 1 }).redirect("/");
 });
 
-router.get("/shift-tracker", requireAuth, (req, res) => {
-  res.sendFile(path.resolve(currentDir, "views", "shiftTracker.html"));
+router.get("/shift-tracker", checkUser, async (req, res) => {
+  // res.sendFile(path.resolve(currentDir, "views", "shiftTracker.ejs"));
+  const userId = res.locals.user._id;
+  const userInfo = await getUserBySin(client, userId);
+  console.log(JSON.stringify(userInfo));
+  res.render(path.resolve(currentDir, "views", "shiftTracker.ejs"), {
+    userName: userInfo.fullname,
+    userEmail: userInfo.email,
+    userPhone: userInfo.phone,
+  });
 });
 
 router.use("/record", timeRouter);

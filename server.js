@@ -1,7 +1,6 @@
 import express from "express";
-import session from "express-session";
 import path from "path";
-import router from "./routes/root.js";
+import router from "./routes/routes.js";
 import {
   client,
   connectToDatabase,
